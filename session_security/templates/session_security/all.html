@@ -1,0 +1,41 @@
+{% comment %}
+This demonstrates how to setup session security client side stuff on your own.
+It provides sensible defaults so you could start with just::
+
+    {% include 'session_security/all.html' %}
+
+{% endcomment %}
+
+{% load i18n %}
+{% load url from future %}
+
+{# If the user is not authenticated then there is no session to secure ! #}
+{% if request.user.is_authenticated %}
+
+    {# The modal dialog stylesheet, it's pretty light so it should be easy to hack #}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}session_security/style.css"></link>
+
+    {# Include the template that actually contains the modal dialog #}
+    {% include 'session_security/dialog.html' %}
+
+    {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
+    <script type="text/javascript" src="{{ STATIC_URL }}session_security/script.js"></script>
+
+    {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
+    <script type="text/javascript">
+    var sessionSecurity = new SessionSecurity();
+
+    {# Merge our settings to the sessionSecurity instance, again you can override any method/attribute #}
+    sessionSecurity = $.extend({
+        LOGIN_URL: '{{ request.session.session_security.LOGIN_URL }}',
+        LOGOUT_URL: '{{ request.session.session_security.LOGOUT_URL }}',
+        EXPIRE_AFTER: {{ request.session.session_security.EXPIRE_AFTER }},
+        WARN_BEFORE: {{ request.session.session_security.WARN_BEFORE }},
+        extendUrl: '{% url 'session_security_extend_session' %}',
+        pingUrl: '{% url 'session_security_ping' %}',
+    }, sessionSecurity);
+    
+    {# Initialize timeouts and events, don't wait for document.ready to reduce clock skews #}
+    sessionSecurity.initialize();
+    </script>
+{% endif %}
