@@ -20,14 +20,14 @@ Requirements
 Resources
 ---------
 
-.. Documentation graciously hosted by RTFD:
-.. http://django-session-security.rtfd.org
+- Git graciously `hosted
+  <https://github.com/yourlabs/django-session-security/>`_ by `GitHub
+  <http://github.com>`_,
+- Documentation graciously `hosted
+  <http://django-session-security.rtfd.org>`_ by `RTFD
+  <http://rtfd.org>`_,
 
 .. Continuous integration graciously hosted by Travis:
 .. http://travis-ci.org/yourlabs/django-session-security
-
-.. Git graciously hosted by GitHub:
-.. https://github.com/yourlabs/django-session-security/
-
 .. Package graciously hosted by PyPi:
 .. http://pypi.python.org/pypi/django-session-security/
