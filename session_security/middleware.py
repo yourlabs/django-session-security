@@ -3,11 +3,14 @@ import datetime
 from django import http
 from django.contrib.auth import logout
 
-from settings import LOGOUT_URL, LOGIN_URL, EXPIRE_AFTER, WARN_BEFORE
+from settings import LOGOUT_URL, LOGIN_URL, EXPIRE_AFTER, WARN_BEFORE, PASSIVE_URLS
 
 class SessionSecurityMiddleware(object):
     def process_request(self, request):
         if not request.user.is_authenticated():
+            return
+        
+        if request.path in PASSIVE_URLS:
             return
 
         now = datetime.datetime.now()

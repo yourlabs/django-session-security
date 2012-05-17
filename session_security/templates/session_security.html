@@ -43,10 +43,13 @@
 
 <script type="text/javascript">
 var SessionSecurity = function() {
-    this.url = '{% url 'session_security_extend_session' %}';
+    this.extendUrl = '{% url 'session_security_extend_session' %}';
+    this.pingUrl = '{% url 'session_security_ping' %}';
 
     this.warn = function() {
         sessionSecurity.dialog.show();
+        sessionSecurity.timeout = setTimeout(sessionSecurity.ping, 
+            sessionSecurity.WARN_BEFORE * 1000)
     }
     this.expire = function() {
         document.location.href = sessionSecurity.LOGOUT_URL + '?next={{ request.path }}';
@@ -57,15 +60,11 @@ var SessionSecurity = function() {
     this.initialize = function() {
         this.dialog.find('.yes').click(function() {
             sessionSecurity.dialog.hide();
+            clearTimeout(sessionSecurity.timeout);
 
-            clearTimeout(sessionSecurity.expireTimeout);
-            clearTimeout(sessionSecurity.warningTimeout);
-
-            $.post(sessionSecurity.url, function(data, textStatus, jqXHR) {
-                sessionSecurity.warningTimeout = setTimeout(sessionSecurity.warn,
+            $.post(sessionSecurity.extendUrl, function(data, textStatus, jqXHR) {
+                sessionSecurity.timeout = setTimeout(sessionSecurity.ping, 
                     (sessionSecurity.EXPIRE_AFTER - sessionSecurity.WARN_BEFORE) * 1000);
-                sessionSecurity.expireTimeout = setTimeout(sessionSecurity.expire, 
-                    sessionSecurity.EXPIRE_AFTER * 1000);
             });
         });
         
@@ -73,9 +72,22 @@ var SessionSecurity = function() {
             sessionSecurity.dialog.hide();
         });
 
-        this.warningTimeout = setTimeout(this.warn,
-            (this.EXPIRE_AFTER - this.WARN_BEFORE) * 1000);
-        this.expireTimeout = setTimeout(this.expire, this.EXPIRE_AFTER * 1000);
+        this.ping = function() {
+            $.post(sessionSecurity.pingUrl, function(data) {
+                if (data == 'expire') {
+                    sessionSecurity.expire();
+                } else if (data == 'warn') {
+                    sessionSecurity.warn();
+                } else {
+                    sessionSecurity.dialog.hide();
+                    sessionSecurity.timeout = setTimeout(sessionSecurity.ping, 
+                        parseInt(data) * 1000)
+                }
+            });
+        }
+
+        this.timeout = setTimeout(sessionSecurity.ping, 
+            (sessionSecurity.EXPIRE_AFTER - sessionSecurity.WARN_BEFORE) * 1000);
     }
 }
 

@@ -1,5 +1,6 @@
 import warnings
 
+from django.core import urlresolvers
 from django.conf import settings
 
 __all__ = ['EXPIRE_AFTER', 'WARN_BEFORE', 'LOGIN_URL', 'LOGOUT_URL']
@@ -11,6 +12,13 @@ WARN_BEFORE = getattr(settings, 'SESSION_SECURITY_WARN_BEFORE', 20)
 LOGIN_URL = settings.LOGIN_URL
 
 LOGOUT_URL = getattr(settings, 'LOGOUT_URL', False)
+
+PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
+PASSIVE_URLS += [
+    urlresolvers.reverse('session_security_ping'),
+    LOGOUT_URL,
+    LOGIN_URL,
+]
 
 if not LOGOUT_URL:
     if 'pinax.apps.account' in settings.INSTALLED_APPS:
