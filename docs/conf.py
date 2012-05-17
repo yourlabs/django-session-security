@@ -34,7 +34,7 @@ for script in ('script', ):
         os.path.join(project_root, 'session_security/static/session_security/%s.js' % script),
         static_root
     )
-    html = html.replace('../../docs/_static/pycco.css', 'pycco.css')
+    html = html.replace('../docs/_static/pycco.css', 'pycco.css')
     f = open(os.path.join(static_root, '%s.html' % script), 'w+')
     f.write(html)
     f.close()
