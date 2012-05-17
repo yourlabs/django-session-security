@@ -1,2 +1,2 @@
-django-session-expiry
-=====================
+django-session-security
+=======================

@@ -1,0 +1,90 @@
+{% load i18n %}
+{% load url from future %}
+
+<style type="text/css">
+/* credit: http://www.csslab.cl/2008/01/30/ventana-modal-solo-con-css/ */
+.session_security_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index:1001;
+    opacity:.75;
+    -moz-opacity: 0.75;
+    filter: alpha(opacity=75);
+}
+
+.session_security_modal {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    padding: 16px;
+    background: #fff;
+    color: #333;
+    z-index:1002;
+    overflow: auto;
+    text-align: center;
+}
+</style>
+
+<div id="session_security_warning" class="session_security" style="display:none">
+    <div class="session_security_overlay"></div>
+    <div class="session_security_modal">
+        <h3>{% trans 'Your session is about to expire' %}</h3>
+        <p>{% trans 'When your session expires, you will have to login again.' %}</p>
+        <p>{% trans 'Do you want to extend your session ?' %}</p>
+        <span class="yes">{% trans 'Yes' %}</span>
+        <span class="no">{% trans 'No' %}</span>
+    </div>
+</div>
+
+<script type="text/javascript">
+var SessionSecurity = function() {
+    this.url = '{% url 'session_security_extend_session' %}';
+
+    this.warn = function() {
+        sessionSecurity.dialog.show();
+    }
+    this.expire = function() {
+        document.location.href = sessionSecurity.LOGOUT_URL + '?next={{ request.path }}';
+    }
+
+    this.dialog = $('#session_security_warning');
+
+    this.initialize = function() {
+        this.dialog.find('.yes').click(function() {
+            sessionSecurity.dialog.hide();
+
+            clearTimeout(sessionSecurity.expireTimeout);
+            clearTimeout(sessionSecurity.warningTimeout);
+
+            $.post(sessionSecurity.url, function(data, textStatus, jqXHR) {
+                sessionSecurity.warningTimeout = setTimeout(sessionSecurity.warn,
+                    (sessionSecurity.EXPIRE_AFTER - sessionSecurity.WARN_BEFORE) * 1000);
+                sessionSecurity.expireTimeout = setTimeout(sessionSecurity.expire, 
+                    sessionSecurity.EXPIRE_AFTER * 1000);
+            });
+        });
+        
+        this.dialog.find('.no').click(function() {
+            sessionSecurity.dialog.hide();
+        });
+
+        this.warningTimeout = setTimeout(this.warn,
+            (this.EXPIRE_AFTER - this.WARN_BEFORE) * 1000);
+        this.expireTimeout = setTimeout(this.expire, this.EXPIRE_AFTER * 1000);
+    }
+}
+
+var sessionSecurity = new SessionSecurity();
+sessionSecurity = $.extend({
+    LOGIN_URL: '{{ request.session.session_security.LOGIN_URL }}',
+    LOGOUT_URL: '{{ request.session.session_security.LOGOUT_URL }}',
+    EXPIRE_AFTER: {{ request.session.session_security.EXPIRE_AFTER }},
+    WARN_BEFORE: {{ request.session.session_security.WARN_BEFORE }},
+}, sessionSecurity);
+sessionSecurity.initialize();
+</script>
