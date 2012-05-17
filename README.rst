@@ -20,10 +20,10 @@ Requirements
 Resources
 ---------
 
-- Git graciously `hosted
+- `Git graciously hosted
   <https://github.com/yourlabs/django-session-security/>`_ by `GitHub
   <http://github.com>`_,
-- Documentation graciously `hosted
+- `Documentation graciously hosted
   <http://django-session-security.rtfd.org>`_ by `RTFD
   <http://rtfd.org>`_,
 

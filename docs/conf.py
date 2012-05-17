@@ -11,12 +11,33 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys, os, os.path
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('../../../lib/python2.7/site-packages/'))
+
+from django.conf import settings
+settings.configure()
+settings.ROOT_URLCONF='session_security.urls'
+settings.SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+
+autoclass_content = "both"
+
+project_root = os.path.abspath('../')
+static_root = os.path.abspath('_static')
+import pycco
+for script in ('script', ):
+    html = pycco.generate_documentation(
+        os.path.join(project_root, 'session_security/static/session_security/%s.js' % script),
+        static_root
+    )
+    html = html.replace('../../docs/_static/pycco.css', 'pycco.css')
+    f = open(os.path.join(static_root, '%s.html' % script), 'w+')
+    f.write(html)
+    f.close()
 
 # -- General configuration -----------------------------------------------------
 
