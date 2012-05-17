@@ -27,13 +27,13 @@ Templates
 session_security/dialog.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../session_security/templates/session_security/dialog.html
+.. literalinclude:: ../../session_security/templates/session_security/dialog.html
    :language: html
 
 session_security/all.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../session_security/templates/session_security/all.html
+.. literalinclude:: ../../session_security/templates/session_security/all.html
    :language: html
 
 Static files
@@ -48,5 +48,5 @@ Read the `script documentation
 session_security/style.css
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../session_security/static/session_security/style.css
+.. literalinclude:: ../../session_security/static/session_security/style.css
    :language: css

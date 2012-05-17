@@ -6,7 +6,7 @@
 Welcome to django-session-security's documentation!
 ===================================================
 
-.. include:: ../README.rst
+.. include:: ../../README.rst
 
 Contents:
 
