@@ -9,7 +9,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name='django-cities-light',
+    name='django-session-security',
     version='1.0alpha',
     description='Let the user secure his session for usage in public computers',
     author='James Pic',
