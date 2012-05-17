@@ -38,7 +38,7 @@ class ExtendSessionView(generic.View):
     def post(self, request, *args, **kwargs):
         """
         Update last activity datetime.
-        
+
         Called when the user clicks 'yes' in the javascript dialog.
         """
 

@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 
 from settings import *
 
+
 class SessionSecurityMiddleware(object):
     """
     The heart of the security that this application attemps to provide.
@@ -31,7 +32,7 @@ class SessionSecurityMiddleware(object):
 
         if not request.user.is_authenticated():
             return
-        
+
         if request.path in PASSIVE_URLS:
             return
 
@@ -49,6 +50,6 @@ class SessionSecurityMiddleware(object):
             logout(request)
             return http.HttpResponseRedirect(
                 '%s?next=%s' % (LOGIN_URL, request.path_info))
-   
+
         data['last_activity'] = now
         request.session['session_security'] = data
