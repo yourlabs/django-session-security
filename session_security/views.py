@@ -9,25 +9,30 @@ __all__ = ['PingView', ]
 
 class PingView(generic.View):
     """
-    Return the number of seconds since last activity. Also, update session's
-    last activity if sinceActivity GET argument is passed and > 0.
-
-    The first thing this view does, is use the sinceActivity request paramater
-    and session last_activity to calculate the last activity on the client, and
-    on the server.
-
-    If the client reports a later last activity, then the session's last
-    activity variable is updated according to the client.
-
-    Return the time since the last activity. Note that if the user generates
-    activity in a browser tab, but not in the other, both will have the real
-    last activity time because of this approach.
-
-    If the client just wants to poll for the time since the real last activity,
-    then it should pass a sinceActivity inferior to 0.
+    View to update the last activity date time and get it.
     """
 
     def get(self, request, *args, **kwargs):
+        """
+        Return the **number of seconds since last activity**. Also, **update
+        session's last activity if** ``sinceActivity`` GET argument is passed
+        and superior to 0.
+
+        - Use the ``sinceActivity`` and
+          ``request.session['session_security']['last_activity']`` to calculate
+          the last activity on the client (javascript), and on the server
+          (django).
+
+        - If the client reports a later last activity, then the session's last
+          activity variable is updated according to the client.
+
+        - Return the time since the last activity. Note that if the user
+          generates activity in a browser tab, but not in the other, both will
+          have the real last activity time because of this approach.
+
+        To just query the actual last activity, let ``sinceActivity`` inferior
+        to 0.
+        """
         from settings import WARN_AFTER, EXPIRE_AFTER
 
         now = datetime.datetime.now()
