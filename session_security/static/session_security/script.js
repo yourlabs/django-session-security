@@ -1,6 +1,6 @@
 // Simple function that adds a number of seconds to a Date object.
 //
-// Example usage, to add two seconds to a date::
+// Example usage, to add two seconds to a date:
 //
 //     d = new Date();
 //     addSeconds(d, 120);
@@ -11,7 +11,7 @@ function addSeconds(date, seconds) {
 }
 
 // An global instance of SessionSecurity is instanciated as such by the default
-// setup (all.html)::
+// setup (all.html):
 //
 //     sessionSecurity = new SessionSecurity();
 //     sessionSecurity = $.extend(SessionSecurity, {
@@ -113,7 +113,7 @@ var SessionSecurity = function() {
     }
 
     this.initialize = function() {
-        // precalculate WARN_BEFORE.
+        // Precalculate WARN_BEFORE.
         this.WARN_BEFORE = this.EXPIRE_AFTER - this.WARN_AFTER;
         
         // Initiate this.lastActivity.
