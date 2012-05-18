@@ -1,36 +1,30 @@
 """
 Settings for django-session-security.
 
-EXPIRE_AFTER
-    The number of seconds after which the session should expire if the
-    authenticated user is idle. Default is 600, so if a user opens a page, and
-    leaves his browser during 10 minutes, the session will expire. Overridable
-    through settings.SESSION_SECURITY_EXPIRE_AFTER
-
 WARN_AFTER
-    The number of seconds before session expiry that should trigger the warning
-    dialog. Default is 30, so if the user opens a page, and leaves his browser,
-    a dialog will show up 30 seconds before the session expires, allowing the
-    user to extend his session. Overridable through
+    Time (in seconds) before the user should be warned that is session will
+    expire because of inactivity. Default 540. Overridable in
     settings.SESSION_SECURITY_WARN_AFTER.
 
+EXPIRE_AFTER
+    Time (in seconds) before the user should be logged out if inactive. Default
+    is 600. Overridable in settings.SESSION_SECURITY_EXPIRE_AFTER.
+
 PASSIVE_URLS
-    Urls that should not count as activity when hit. For example, an ajax
-    request that pings the server without the user consent's should be added to
-    PASSIVE_URLS. PASSIVE_URLS is a list overridable through
-    settings.SESSION_SECURITY_PASSIVE_URLS.
+    List of urls that should be ignored by the middleware. For example the ping
+    ajax request of session_security is made without user intervention, as such
+    it should not be used to update the user's last activity datetime.
+    Overridable in settings.SESSION_SECURITY_PASSIVE_URLS.
 
 LOGOUT_URL
-    The url to use for logout. Note that it will be passed a GET argument,
-    'next', with the url from which the user was logged-out. Overridable
-    through settings.LOGOUT_URL.
+    Url to logout. Uses settings.LOGOUT_URL.
 
 LOGIN_URL
-    The url to use for login. Like LOGOUT_URL, it is passed a GET request
-    argument, 'next', and is overridable through settings.LOGIN_URL.
+    Url to login. Uses settings.LOGIN_URL.
 
 Note that this module will raise a warning if
-settings.SESSION_EXPIRE_AT_BROWSER_CLOSE is not True.
+settings.SESSION_EXPIRE_AT_BROWSER_CLOSE is not True, because it makes no sense
+to use this app with SESSION_EXPIRE_AT_BROWSER_CLOSE to False.
 """
 
 import warnings
@@ -38,7 +32,7 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'LOGIN_URL', 'LOGOUT_URL', 'PASSIVE_URLS', 'SKEW_MARGIN']
+__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'LOGIN_URL', 'LOGOUT_URL', 'PASSIVE_URLS']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
@@ -47,8 +41,6 @@ WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 30)
 LOGIN_URL = settings.LOGIN_URL
 
 LOGOUT_URL = getattr(settings, 'LOGOUT_URL', False)
-
-SKEW_MARGIN = getattr(settings, 'SESSION_SECURITY_SKEW_MARGIN', 3)
 
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 PASSIVE_URLS += [

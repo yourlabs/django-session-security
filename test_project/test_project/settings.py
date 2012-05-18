@@ -145,8 +145,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
-SESSION_SECURITY_EXPIRE_AFTER=30
-SESSION_SECURITY_WARN_AFTER=15
+SESSION_SECURITY_EXPIRE_AFTER=10
+SESSION_SECURITY_WARN_AFTER=5
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
