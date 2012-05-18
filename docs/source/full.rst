@@ -5,21 +5,25 @@ Settings
 --------
 
 .. automodule:: session_security.settings
+   :members:
 
 Middleware
 ----------
 
 .. automodule:: session_security.middleware
+   :members:
 
 Urls
 ----
 
 .. automodule:: session_security.urls
+   :members:
 
 Views
 -----
 
 .. automodule:: session_security.views
+   :members:
 
 Templates
 ---------
