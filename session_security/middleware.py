@@ -24,7 +24,7 @@ class SessionSecurityMiddleware(object):
         - If the user is not authenticated: do nothing.
         - If the request url is in PASSIVE_URLS: do nothing.
         - If request.session['session_security'] is unset: set it up.
-        - If the seconds elapsed since session_security['last_activity'] 
+        - If the seconds elapsed since session_security['last_activity']
           exceeds EXPIRE_AFTER:
             - Logout the user
             - Redirect to LOGIN_URL?next=/the/path/

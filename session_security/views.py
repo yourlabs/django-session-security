@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.views import generic
 from django import http
 
-__all__ = ['PingView',]
+__all__ = ['PingView', ]
 
 
 class PingView(generic.View):
@@ -34,21 +34,26 @@ class PingView(generic.View):
 
         if 'session_security' not in request.session.keys():
             return http.HttpResponse('-1')
+        data = request.session['session_security']
 
         client_since_activity = int(request.GET['sinceActivity'])
-        client_last_activity = now - datetime.timedelta(seconds=client_since_activity)
+        client_last_activity = now - datetime.timedelta(
+            seconds=client_since_activity)
 
-        server_last_activity = request.session['session_security']['last_activity']
+        server_last_activity = data['last_activity']
         server_since_activity = (now - server_last_activity).seconds
 
-        if client_since_activity < 0 or server_last_activity > client_last_activity:
+        if client_since_activity < 0 or \
+            server_last_activity > client_last_activity:
+
             last_activity = server_last_activity
             since_activity = server_since_activity
         else:
             last_activity = client_last_activity
             since_activity = client_since_activity
 
-            request.session['session_security']['last_activity'] = client_last_activity
+            data['last_activity'] = client_last_activity
+            request.session['session_security'] = data
             request.session.save()
 
         if since_activity > EXPIRE_AFTER:

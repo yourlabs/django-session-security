@@ -32,7 +32,8 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'LOGIN_URL', 'LOGOUT_URL', 'PASSIVE_URLS']
+__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'LOGIN_URL', 'LOGOUT_URL',
+    'PASSIVE_URLS']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
