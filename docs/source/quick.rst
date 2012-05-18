@@ -21,6 +21,10 @@ Add to ``settings.MIDDLEWARE_CLASSES``, **after** django's AuthenticationMiddlew
 
     'session_security.middleware.SessionSecurityMiddleware',
 
+Ensure settings.TEMPLATE_CONTEXT_PROCESSORS has::
+
+    'django.core.context_processors.request'
+
 Add to urls::
 
     url(r'session_security/', include('session_security.urls')),

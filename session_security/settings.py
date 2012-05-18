@@ -56,11 +56,5 @@ PASSIVE_URLS += [
     LOGOUT_URL,
 ]
 
-if not LOGOUT_URL:
-    if 'pinax.apps.account' in settings.INSTALLED_APPS:
-        LOGOUT_URL = urlresolvers.reverse('acct_logout')
-    else:
-        raise Exception('LOGOUT_URL not configured, session_security cannot work')
-
 if not getattr(settings, 'SESSION_EXPIRE_AT_BROWSER_CLOSE', False):
     warnings.warn('settings.SESSION_EXPIRE_AT_BROWSER_CLOSE is not True')

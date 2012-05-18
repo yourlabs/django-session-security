@@ -4,8 +4,6 @@ from django.contrib import auth
 from django.views import generic
 from django import http
 
-from settings import WARN_AFTER, EXPIRE_AFTER, SKEW_MARGIN
-
 __all__ = ['PingView',]
 
 
@@ -20,13 +18,15 @@ class PingView(generic.View):
     - if the user has generated activity, return the lifetime of the session in seconds.
     """
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        from settings import WARN_AFTER, EXPIRE_AFTER, SKEW_MARGIN
+
         now = datetime.datetime.now()
 
         if 'session_security' not in request.session.keys():
             return http.HttpResponse('-1')
 
-        client_since_activity = int(request.POST.get('sinceActivity', 0))
+        client_since_activity = int(request.GET['sinceActivity'])
         client_last_activity = now - datetime.timedelta(seconds=client_since_activity)
 
         server_last_activity = request.session['session_security']['last_activity']
@@ -34,10 +34,11 @@ class PingView(generic.View):
 
         print client_since_activity, server_since_activity
 
-        if server_last_activity > client_last_activity:
+        if client_since_activity < 0 or server_last_activity > client_last_activity:
             last_activity = server_last_activity
             since_activity = server_since_activity
         else:
+            print 'use client since', client_since_activity
             last_activity = client_last_activity
             since_activity = client_since_activity
 

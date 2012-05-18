@@ -21,6 +21,8 @@ It provides sensible defaults so you could start with just::
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
     <script type="text/javascript" src="{{ STATIC_URL }}session_security/script.js"></script>
 
+    {% csrf_token %}
+
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
     <script type="text/javascript">
     var sessionSecurity = new SessionSecurity();
@@ -32,6 +34,7 @@ It provides sensible defaults so you could start with just::
         EXPIRE_AFTER: {{ request.session.session_security.EXPIRE_AFTER }},
         WARN_AFTER: {{ request.session.session_security.WARN_AFTER }},
         pingUrl: '{% url 'session_security_ping' %}',
+        token: $('input[name=csrfmiddlewaretoken]').val(),
     }, sessionSecurity);
     
     {# Initialize timeouts and events, don't wait for document.ready to reduce clock skews #}

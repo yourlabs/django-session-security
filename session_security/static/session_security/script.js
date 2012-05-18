@@ -1,6 +1,15 @@
+// Simple function that adds a number of seconds to a Date object.
+//
+// Example usage::
+//
+//     d = new Date();
+//     addSeconds(d, 120);
+//
+// Make d 2 minutes later
 function addSeconds(date, seconds) {
     var sum = date.getSeconds() + seconds;
 
+    // @todo: reverse the number of minutes depending on seconds
     if (sum > 59) {
         date.setMinutes(date.getMinutes() + 1)
         date.setSeconds(sum - 60);
@@ -14,11 +23,20 @@ function addSeconds(date, seconds) {
     return date;
 }
 
+// An global instance of SessionSecurity is instanciated as such by the default
+// setup (all.html)::
+//
+//     sessionSecurity = new SessionSecurity();
+//     sessionSecurity = $.extend(SessionSecurity, {
+//         // define overrides here
+//     });
+//     sessionSecurity.initialize()
 var SessionSecurity = function() {
-    // HTML element that should show to warn the user that his session will expire
+    // HTML element that should show to warn the user that his session will
+    // expire
     this.warningElement = $('#session_security_warning');
 
-    // Callback that should display the user with a login prompt
+    // Callback called when the session expired
     this.expire = function() {
         $.get(this.LOGOUT_URL, function() {
             document.location.href = sessionSecurity.LOGIN_URL + '?next=' + document.location.pathname;
@@ -31,45 +49,64 @@ var SessionSecurity = function() {
     }
 
     // Callback for activity events, mouse move, keyboard move, scroll ...
+    // Beware: it is bind as function, which means that 'this' is out of scope,
+    // use sessionSecurity global variable instead
     this.activity = function() {
-        if (sessionSecurity.warningElement.is(':visible')) {
-            console.log('activity forces tick');
-            sessionSecurity.warningElement.hide();
-            clearTimeout(sessionSecurity.timeout);
-            sessionSecurity.tick();
-        }
+        // Update last activity datetime
         sessionSecurity.lastActivity = new Date();
+
+        // If we're in warning period
+        if (sessionSecurity.warningElement.is(':visible')) {
+            // Hide the warning to unlock the page
+            sessionSecurity.warningElement.hide();
+            // Cancel the next programed tick
+            clearTimeout(sessionSecurity.timeout);
+            // Tick now, to upload last activity time to the server
+            sessionSecurity.tick(true);
+        }
     }
 
-    // Timed callback
-    this.tick = function() {
+    this.tick = function(activity) {
         var now = new Date();
-        var sinceActivity = Math.floor((now - sessionSecurity.lastActivity) / 1000)
+        var sinceActivity = activity ? Math.floor((now - sessionSecurity.lastActivity) / 1000) : -1;
 
         // Given the seconds elapsed since last activity, ask the server how
         // long to wait before another tick
-        $.post(
+        $.get(
             sessionSecurity.pingUrl, 
             {
-                'sinceActivity': sinceActivity
+                'sinceActivity': sinceActivity,
+                'csrfmiddlewaretoken': sessionSecurity.token,
             },
             function(data, textStatus, jqXHR) {
-                var sinceActivity = parseInt(data);
-                sessionSecurity.lastActivity = addSeconds(new Date(), sinceActivity * -1);
-                console.log(sessionSecurity.lastActivity)
+                if (sinceActivity != parseInt(data)) {
+                    var sinceActivity = parseInt(data);
+                    sessionSecurity.lastActivity = addSeconds(new Date(), sinceActivity * -1);
+                }
+                console.log('last activity', sessionSecurity.lastActivity)
+                console.log('since activity', sinceActivity)
 
                 expireIn = sessionSecurity.EXPIRE_AFTER - sinceActivity;
                 warnIn = sessionSecurity.WARN_AFTER - sinceActivity;
-
-                console.log(sinceActivity, expireIn, warnIn)
+                console.log('calculates warn after', warnIn)
+                console.log('calculates expire after', expireIn)
 
                 if (expireIn <= 0) {
                     sessionSecurity.expire();
                 } else if (warnIn <= 0) {
                     sessionSecurity.warn();
+                    var next = expireIn;
+                    if (next / 2 != next && next / 2 > 0) {
+                        next = next / 2;
+                    }
+                    if (next < 1) {
+                        console.log('force next to 1');
+                        next = 1;
+                    }
                     sessionSecurity.timeout = setTimeout(sessionSecurity.tick, 
-                        expireIn * 1000);
+                        next * 1000);
                 } else {
+                    sessionSecurity.warningElement.hide();
                     sessionSecurity.timeout = setTimeout(sessionSecurity.tick, 
                         warnIn * 1000);
                 }
