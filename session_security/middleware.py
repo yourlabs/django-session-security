@@ -37,11 +37,12 @@ class SessionSecurityMiddleware(object):
             return
 
         now = datetime.datetime.now()
+
         data = request.session.get('session_security', {
             'LOGOUT_URL': LOGOUT_URL,
             'LOGIN_URL': LOGIN_URL,
             'EXPIRE_AFTER': EXPIRE_AFTER,
-            'WARN_BEFORE': WARN_BEFORE,
+            'WARN_AFTER': WARN_AFTER,
             'last_activity': now,
         })
 
@@ -52,4 +53,7 @@ class SessionSecurityMiddleware(object):
                 '%s?next=%s' % (LOGIN_URL, request.path_info))
 
         data['last_activity'] = now
+        if 'session_security' in request.session.keys():
+            print 'was', request.session['session_security']['last_activity']
         request.session['session_security'] = data
+        print 'is', request.session['session_security']['last_activity']

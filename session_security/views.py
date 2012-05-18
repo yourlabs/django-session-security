@@ -1,9 +1,12 @@
 import datetime
 
+from django.contrib import auth
 from django.views import generic
 from django import http
 
-from settings import EXPIRE_AFTER, WARN_BEFORE
+from settings import WARN_AFTER, EXPIRE_AFTER, SKEW_MARGIN
+
+__all__ = ['PingView',]
 
 
 class PingView(generic.View):
@@ -21,27 +24,28 @@ class PingView(generic.View):
         now = datetime.datetime.now()
 
         if 'session_security' not in request.session.keys():
-            return http.HttpResponse('expire')
+            return http.HttpResponse('-1')
 
-        last = request.session['session_security']['last_activity']
-        delta = now - last
+        client_since_activity = int(request.POST.get('sinceActivity', 0))
+        client_last_activity = now - datetime.timedelta(seconds=client_since_activity)
 
-        if delta.seconds > EXPIRE_AFTER:
-            return http.HttpResponse('expire')
-        elif delta.seconds > EXPIRE_AFTER - WARN_BEFORE:
-            return http.HttpResponse('warn')
+        server_last_activity = request.session['session_security']['last_activity']
+        server_since_activity = (now - server_last_activity).seconds
+
+        print client_since_activity, server_since_activity
+
+        if server_last_activity > client_last_activity:
+            last_activity = server_last_activity
+            since_activity = server_since_activity
         else:
-            return http.HttpResponse(delta.seconds)
+            last_activity = client_last_activity
+            since_activity = client_since_activity
 
+            request.session['session_security']['last_activity'] = client_last_activity
+            request.session.save()
 
-class ExtendSessionView(generic.View):
-    def post(self, request, *args, **kwargs):
-        """
-        Update last activity datetime.
+        if since_activity > EXPIRE_AFTER:
+            auth.logout(request)
 
-        Called when the user clicks 'yes' in the javascript dialog.
-        """
-
-        now = datetime.datetime.now()
-        request.session['session_security']['last_activity'] = now
-        return http.HttpResponse()
+        print "RETURN:", since_activity
+        return http.HttpResponse(since_activity)

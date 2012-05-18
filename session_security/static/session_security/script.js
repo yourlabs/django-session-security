@@ -1,66 +1,95 @@
+function addSeconds(date, seconds) {
+    var sum = date.getSeconds() + seconds;
+
+    if (sum > 59) {
+        date.setMinutes(date.getMinutes() + 1)
+        date.setSeconds(sum - 60);
+    } else if (sum < 1) {
+        date.setMinutes(date.getMinutes() - 1)
+        date.setSeconds(sum + 60);
+    } else {
+        date.setSeconds(sum);
+    }
+
+    return date;
+}
+
 var SessionSecurity = function() {
-    // Show the dialog and create a timeout for ping() after WARN_BEFORE.
-    // Because this warning should happen WARN_BEFORE seconds before actual
-    // expiry.
-    this.warn = function() {
-        this.dialog.show();
-        this.timeout = setTimeout(this.ping, this.WARN_BEFORE * 1000)
-    }
+    // HTML element that should show to warn the user that his session will expire
+    this.warningElement = $('#session_security_warning');
 
-    // Redirect to LOGOUT_URL?next=/current/url/
+    // Callback that should display the user with a login prompt
     this.expire = function() {
-        document.location.href = this.LOGOUT_URL + '?next=' + document.location.href;
+        $.get(this.LOGOUT_URL, function() {
+            document.location.href = sessionSecurity.LOGIN_URL + '?next=' + document.location.pathname;
+        });
     }
 
-    // Element that contains the modal dialog, which should contain a question
-    // like 'Do you want to extend your session ?' and provide an element of
-    // class 'yes' and another of class 'no'.
-    this.dialog = $('#session_security_warning');
+    // Callback that should display the warning
+    this.warn = function() {
+        this.warningElement.fadeIn();
+    }
+
+    // Callback for activity events, mouse move, keyboard move, scroll ...
+    this.activity = function() {
+        if (sessionSecurity.warningElement.is(':visible')) {
+            console.log('activity forces tick');
+            sessionSecurity.warningElement.hide();
+            clearTimeout(sessionSecurity.timeout);
+            sessionSecurity.tick();
+        }
+        sessionSecurity.lastActivity = new Date();
+    }
+
+    // Timed callback
+    this.tick = function() {
+        var now = new Date();
+        var sinceActivity = Math.floor((now - sessionSecurity.lastActivity) / 1000)
+
+        // Given the seconds elapsed since last activity, ask the server how
+        // long to wait before another tick
+        $.post(
+            sessionSecurity.pingUrl, 
+            {
+                'sinceActivity': sinceActivity
+            },
+            function(data, textStatus, jqXHR) {
+                var sinceActivity = parseInt(data);
+                sessionSecurity.lastActivity = addSeconds(new Date(), sinceActivity * -1);
+                console.log(sessionSecurity.lastActivity)
+
+                expireIn = sessionSecurity.EXPIRE_AFTER - sinceActivity;
+                warnIn = sessionSecurity.WARN_AFTER - sinceActivity;
+
+                console.log(sinceActivity, expireIn, warnIn)
+
+                if (expireIn <= 0) {
+                    sessionSecurity.expire();
+                } else if (warnIn <= 0) {
+                    sessionSecurity.warn();
+                    sessionSecurity.timeout = setTimeout(sessionSecurity.tick, 
+                        expireIn * 1000);
+                } else {
+                    sessionSecurity.timeout = setTimeout(sessionSecurity.tick, 
+                        warnIn * 1000);
+                }
+            }
+        );
+    }
 
     this.initialize = function() {
-        // When the user clicks 'Yes':
-        // - hide the dialog that this.warn() has displayed, 
-        // - remove the timeout that this.warn() has setup, 
-        // - POST to ExtendSessionView,
-        // - on POST success, set this.ping to run again later.
-        this.dialog.find('.yes').click(function() {
-            sessionSecurity.dialog.hide();
-            clearTimeout(sessionSecurity.timeout);
-
-            $.post(sessionSecurity.extendUrl, function(data, textStatus, jqXHR) {
-                sessionSecurity.timeout = setTimeout(sessionSecurity.ping, 
-                    (sessionSecurity.EXPIRE_AFTER - sessionSecurity.WARN_BEFORE) * 1000);
-            });
-        });
+        // precalculate WARN_BEFORE
+        this.WARN_BEFORE = this.EXPIRE_AFTER - this.WARN_AFTER;
         
-        // When the user clicks 'No', hide the dialog that this.warn() has displayed().
-        this.dialog.find('.no').click(function() {
-            sessionSecurity.dialog.hide();
-        });
+        // Initiate this.lastActivity
+        this.lastActivity = new Date();
 
-        // POST to PingView, which may return 3 kind of values:
-        // - call expire() if 'expire' string was responded,
-        // - call warn() if 'warn' string was responded,
-        // - hide the dialog and set a timeout for ping after the number of
-        //   responded seconds.
-        this.ping = function() {
-            $.post(sessionSecurity.pingUrl, function(data) {
-                if (data == 'expire') {
-                    sessionSecurity.expire();
-                } else if (data == 'warn') {
-                    sessionSecurity.warn();
-                } else {
-                    sessionSecurity.dialog.hide();
-                    sessionSecurity.timeout = setTimeout(sessionSecurity.ping, 
-                        parseInt(data) * 1000)
-                }
-            });
-        }
+        // try to monitor for activity in the page
+        $('*').scroll(this.activity);
+        $('*').keyup(this.activity);
+        $('*').click(this.activity);
 
-        // At the end of SessionSecurity constructor, set ping() to run when
-        // the user is supposed to be warned that his session will expire.
-        this.timeout = setTimeout(this.ping, 
-            (this.EXPIRE_AFTER - this.WARN_BEFORE) * 1000);
+        this.timeout = setTimeout(sessionSecurity.tick, this.WARN_AFTER*1000);
     }
 }
 

@@ -30,8 +30,7 @@ It provides sensible defaults so you could start with just::
         LOGIN_URL: '{{ request.session.session_security.LOGIN_URL }}',
         LOGOUT_URL: '{{ request.session.session_security.LOGOUT_URL }}',
         EXPIRE_AFTER: {{ request.session.session_security.EXPIRE_AFTER }},
-        WARN_BEFORE: {{ request.session.session_security.WARN_BEFORE }},
-        extendUrl: '{% url 'session_security_extend_session' %}',
+        WARN_AFTER: {{ request.session.session_security.WARN_AFTER }},
         pingUrl: '{% url 'session_security_ping' %}',
     }, sessionSecurity);
     
