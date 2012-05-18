@@ -121,9 +121,10 @@ var SessionSecurity = function() {
         this.lastActivity = new Date();
 
         // Try to monitor for activity in the page.
-        $('*').scroll(this.activity);
-        $('*').keyup(this.activity);
-        $('*').click(this.activity);
+        $(document).scroll(this.activity);
+        $(document).keyup(this.activity);
+        $(document).mousemove(this.activity);
+        $(document).click(this.activity);
 
         // Tick when warning time is expected.
         this.timeout = setTimeout(sessionSecurity.tick, this.WARN_AFTER*1000);
