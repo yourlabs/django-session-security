@@ -1,5 +1,5 @@
 """
-Two urls meant to be used by javascript.
+One url meant to be used by javascript.
 
 session_security_ping
     Checks and eventually update the server side status of the session.
