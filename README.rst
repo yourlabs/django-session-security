@@ -26,8 +26,8 @@ Resources
 - `Documentation graciously hosted
   <http://django-session-security.rtfd.org>`_ by `RTFD
   <http://rtfd.org>`_,
+- `Package graciously hosted
+  <http://pypi.python.org/pypi/django-session-security/>`_ by PyPi.
 
 .. Continuous integration graciously hosted by Travis:
 .. http://travis-ci.org/yourlabs/django-session-security
-.. Package graciously hosted by PyPi:
-.. http://pypi.python.org/pypi/django-session-security/
