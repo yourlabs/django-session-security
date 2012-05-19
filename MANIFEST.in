@@ -1,0 +1,2 @@
+include *.rst *.txt README
+recursive-include autocomplete_light *.html *.css *.js *.py
