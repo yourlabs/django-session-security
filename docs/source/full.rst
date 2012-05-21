@@ -38,7 +38,7 @@ session_security/all.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ../../session_security/templates/session_security/all.html
-   :language: html
+   :language: django
 
 Static files
 ------------
