@@ -20,6 +20,9 @@ Requirements
 Resources
 ---------
 
+You could subscribe to the mailing list ask questions or just be informed of
+package updates.
+
 - `Git graciously hosted
   <https://github.com/yourlabs/django-session-security/>`_ by `GitHub
   <http://github.com>`_,
@@ -27,7 +30,11 @@ Resources
   <http://django-session-security.rtfd.org>`_ by `RTFD
   <http://rtfd.org>`_,
 - `Package graciously hosted
-  <http://pypi.python.org/pypi/django-session-security/>`_ by PyPi.
+  <http://pypi.python.org/pypi/django-session-security/>`_ by `PyPi
+  <http://pypi.python.org/pypi>`_,
+- `Mailing list graciously hosted
+  <http://groups.google.com/group/yourlabs>`_ by `Google
+  <http://groups.google.com>`_
 
 .. Continuous integration graciously hosted by Travis:
 .. http://travis-ci.org/yourlabs/django-session-security
