@@ -26,7 +26,8 @@ var SessionSecurity = function() {
     // **Callback** for when session expires.
     this.expire = function() {
         $.get(this.LOGOUT_URL, function() {
-            document.location.href = sessionSecurity.LOGIN_URL + '?next=' + document.location.pathname;
+            var url = sessionSecurity.LOGIN_URL + '?next=' + document.location.pathname;
+            $('body').html('Your session has expired. <a href="' + url + '">Login again</a>');
         });
     }
 
