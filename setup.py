@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-import os
+import os, sys
 
 # Utility function to read the README file.
 # Used for the long_description. It's nice, because now 1) we have a top level
@@ -12,7 +12,7 @@ def read(fname):
 
 if 'sdist' in sys.argv:
     # clear compiled mo files before building the distribution
-    walk = os.walk(os.path.join(os.getcwd(), 'autocomplete_light/locale'))
+    walk = os.walk(os.path.join(os.getcwd(), 'session_security/locale'))
     for dirpath, dirnames, filenames in walk:
         if not filenames:
             continue
@@ -28,7 +28,7 @@ else:
         pass
     else:
         dir = os.getcwd()
-        os.chdir(os.path.join(dir, 'autocomplete_light'))
+        os.chdir(os.path.join(dir, 'session_security'))
         os.system('django-admin.py compilemessages')
         os.chdir(dir)
 
