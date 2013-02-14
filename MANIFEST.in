@@ -1,2 +1,2 @@
 include *.rst *.txt README
-recursive-include session_security *.html *.css *.js *.py
+recursive-include session_security *.html *.css *.js *.py *.po *.mo
