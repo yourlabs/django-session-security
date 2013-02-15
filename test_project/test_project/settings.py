@@ -5,6 +5,8 @@ import posixpath
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -76,6 +78,12 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+
+FIXTURE_DIRS = (
+    os.path.join(PROJECT_ROOT, 'fixtures'),
+)
+
+print 'HI', os.path.join(PROJECT_ROOT, 'fixtures'),
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -162,16 +170,15 @@ LOGGING = {
         }
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
