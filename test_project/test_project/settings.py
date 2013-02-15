@@ -83,8 +83,6 @@ FIXTURE_DIRS = (
     os.path.join(PROJECT_ROOT, 'fixtures'),
 )
 
-print 'HI', os.path.join(PROJECT_ROOT, 'fixtures'),
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
