@@ -10,10 +10,6 @@ yourlabs.SessionSecurity = function(pingUrl) {
     // expire.
     this.$warning = $('#session_security_warning');
 
-    // **HTML element** that should replace <body> contents when the session
-    // has expired, hiding potentially sensible data from HTML source code.
-    this.$expired = $('#session_security_expired');
-
     // A hack to anticipate clock skews. If the next event (warn or expire) is
     // in 13 seconds and that timeRatio is 1.3, then it will hit PingView after
     // 10 seconds (10/1.3). Adjust to your needs when you are asked to fine-tune.
@@ -36,8 +32,7 @@ yourlabs.SessionSecurity = function(pingUrl) {
 yourlabs.SessionSecurity.prototype = {
     // Called when PingView responds with ['expire', <something lower than 0>].
     expire: function() {
-        $('body').html(this.$expired);
-        this.expired = true;
+        window.location.reload()
     },
     
     // Called when PingView responds with 
@@ -68,8 +63,6 @@ yourlabs.SessionSecurity.prototype = {
 
     // Callback to process PingView response.
     pong: function(data) {
-        if (this.expired) return;
-
         this.action = data[0];
         this.time = data[1];        
 
