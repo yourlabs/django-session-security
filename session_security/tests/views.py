@@ -35,7 +35,7 @@ class ViewsTestCase(unittest.TestCase):
 
         now = datetime.now()
         session = self.client.session
-        session['session_security']['last_activity'] = now - timedelta(seconds=server)
+        session['_session_security'] = now - timedelta(seconds=server)
         session.save()
         response = self.client.post('/session_security/ping/', {'inactiveSince': client})
         self.assertEqual(response.content, expected)

@@ -38,24 +38,12 @@ class SessionSecurityMiddleware(object):
         if not request.user.is_authenticated():
             return
 
-        if request.path in PASSIVE_URLS:
-            return
-
         now = datetime.datetime.now()
+        request.session.setdefault('_session_security', now)
 
-        data = request.session.get('session_security', {
-            'LOGOUT_URL': LOGOUT_URL,
-            'LOGIN_URL': LOGIN_URL,
-            'EXPIRE_AFTER': EXPIRE_AFTER,
-            'WARN_AFTER': WARN_AFTER,
-            'last_activity': now,
-        })
-
-        delta = now - data['last_activity']
+        delta = now - request.session['_session_security']
         if delta.seconds > EXPIRE_AFTER and request.path_info != LOGIN_URL:
             logout(request)
-            return http.HttpResponseRedirect(
-                '%s?next=%s' % (LOGIN_URL, request.path_info))
-
-        data['last_activity'] = now
-        request.session['session_security'] = data
+            if request.is_ajax():
+                return http.HttpResponseRedirect(
+                    '%s?next=%s' % (LOGIN_URL, request.path_info))

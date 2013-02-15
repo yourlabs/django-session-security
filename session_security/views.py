@@ -35,12 +35,12 @@ class PingView(generic.View):
         """
         from settings import WARN_AFTER, EXPIRE_AFTER
 
-        if 'session_security' not in request.session.keys():
+        if '_session_security' not in request.session.keys():
             # Was logged out, maybe in another tab ?
             return http.HttpResponse('["expire", -1]')
 
         now = datetime.now()
-        last_activity = request.session['session_security']['last_activity']
+        last_activity = request.session['_session_security']
         client_inactive_since = int(request.POST['inactiveSince'])
         server_inactive_since = (now - last_activity).seconds
 
@@ -51,8 +51,7 @@ class PingView(generic.View):
                 - timedelta(seconds=client_inactive_since))
 
             # Update the session
-            request.session['session_security']['last_activity'] = last_activity
-            request.session.save()
+            request.session['_session_security'] = last_activity
 
         # We may now calculate how long the client has really been inactive
         inactive_for = (now - last_activity).seconds
