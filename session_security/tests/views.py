@@ -12,7 +12,10 @@ class ViewsTestCase(unittest.TestCase):
         self.client = Client()
 
     def test_anonymous(self):
-        return
+        self.client.logout()
+        self.client.get('/admin/')
+        response = self.client.post('/session_security/ping/', {'inactiveSince': '1'})
+        self.assertEqual(response.content, '["expire", -1]')
 
     ping_provider = lambda: (
         (1, 2, '["warn", 4]'),

@@ -36,7 +36,8 @@ class PingView(generic.View):
         from settings import WARN_AFTER, EXPIRE_AFTER
 
         if 'session_security' not in request.session.keys():
-            return http.HttpResponse('-1')
+            # Was logged out, maybe in another tab ?
+            return http.HttpResponse('["expire", -1]')
 
         now = datetime.now()
         last_activity = request.session['session_security']['last_activity']
