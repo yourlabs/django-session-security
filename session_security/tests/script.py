@@ -102,7 +102,7 @@ class ScriptTestCase(LiveServerTestCase):
             self.browser.switch_to_window(win)
             self.assertWarningShown()
 
-        time.sleep(3)
+        time.sleep(4)
         self.press_space()
         time.sleep(4)
 
