@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 
 from django.test import LiveServerTestCase
@@ -23,8 +24,12 @@ class ScriptTestCase(LiveServerTestCase):
         password_input.send_keys(password)
         self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
 
+    def new_window(self, name='other'):
+        self.browser.execute_script('window.open("/admin/", "'+ name +'")')
+        self.browser.switch_to_window(self.browser.window_handles[1])
         while self.warning_element() is False:
             time.sleep(0.1)
+        self.browser.switch_to_window(self.browser.window_handles[0])
 
     def press_space(self):
         a = ActionChains(self.browser)
@@ -37,6 +42,59 @@ class ScriptTestCase(LiveServerTestCase):
                 '#session_security_warning')[0]
         except IndexError:
             return False
+
+    def wait_for_pages_loaded(self):
+        for win in self.browser.window_handles:
+            while self.warning_element() is False:
+                time.sleep(0.1)
+
+    def deadline_passed(self, now, deadline):
+        return (datetime.now() - now).seconds > deadline
+
+    def assertWarningShows(self, max_seconds):
+        now = datetime.now()
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+
+            while self.warning_element() is False:
+                time.sleep(0.1)
+
+                if self.deadline_passed(now, max_seconds):
+                    self.fail('Warning did not make it into DOM')
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+
+            while self.warning_element().is_displayed() is False:
+                time.sleep(0.1)
+
+                if self.deadline_passed(now, max_seconds):
+                    self.fail('Warning did not make it into DOM')
+
+    def assertWarningHides(self, max_seconds):
+        now = datetime.now()
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+
+            while self.warning_element().is_displayed() is not False:
+                time.sleep(0.1)
+
+                if self.deadline_passed(now, max_seconds):
+                    self.fail('Warning did not hide')
+
+    def assertExpires(self, max_seconds):
+        now = datetime.now()
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+
+            while self.warning_element() is not False:
+                time.sleep(0.1)
+
+                if self.deadline_passed(now, max_seconds):
+                    self.fail('Warning did not make it out of DOM')
 
     def assertWarningShown(self):
         for win in self.browser.window_handles:
@@ -53,67 +111,46 @@ class ScriptTestCase(LiveServerTestCase):
             self.browser.switch_to_window(win)
             self.assertTrue(self.warning_element() is False)
 
-    def new_window(self):
-        self.browser.execute_script('window.open("/admin/", "other")')
-        self.browser.switch_to_window(self.browser.window_handles[1])
-        while self.warning_element() is False:
-            time.sleep(0.1)
-        self.browser.switch_to_window(self.browser.window_handles[0])
 
     def test_single_window_inactivity(self):
+        self.wait_for_pages_loaded()
         self.assertWarningHidden()
-
-        time.sleep(5+1)  # Added one second to compensate for fadeIn
-        self.assertWarningShown()
-
-        time.sleep(5+1)  # Added one second to compensate for lag
-        self.assertWarningNotInPage()
+        self.assertWarningShows(9)
+        self.assertExpires(9)
 
     def test_single_dont_show_warning(self):
+        self.wait_for_pages_loaded()
+        self.assertWarningHidden()
+        time.sleep(3.5)
         self.press_space()
-
-        time.sleep(3+1)  # Added one seconds to compensate for fadeIn
+        self.assertWarningHidden()
+        time.sleep(4)
         self.assertWarningHidden()
 
     def test_single_hide_warning(self):
-        time.sleep(5+1)  # Added one seconds to compensate for fadeIn
-        self.assertWarningShown()
-
+        self.assertWarningShows(9)
         self.press_space()
-        self.assertWarningHidden()
+        self.assertWarningHides(2)
 
     def test_double_window_inactivity(self):
         self.new_window()
+        self.wait_for_pages_loaded()
         self.assertWarningHidden()
+        self.assertWarningShows(9)
+        self.assertExpires(9)
 
-        time.sleep(5+1)  # Added one second to compensate for fadeIn
-        self.assertWarningShown()
-
-        time.sleep(5+1)  # Added one second to compensate for lag
-        self.assertWarningNotInPage()
-
-    def test_double_window_hide_warning(self):
+    def test_double_dont_show_warning(self):
         self.new_window()
+        self.wait_for_pages_loaded()
         self.assertWarningHidden()
-
-        time.sleep(5+1)  # Added one seconds to compensate for fadeIn
-        self.assertWarningShown()
-
-        # Press space at 8th second
-        time.sleep(2)
+        time.sleep(3.5)
         self.press_space()
-
-        # Wait until the 11th second (after lastChance expire check) and both
-        # warnings should be hidden
-        time.sleep(3)
-
+        self.assertWarningHidden()
+        time.sleep(4)
         self.assertWarningHidden()
 
-    def test_double_window_dont_show_warning(self):
+    def test_double_hide_warning(self):
         self.new_window()
-
-        time.sleep(3)
+        self.assertWarningShows(9)
         self.press_space()
-
-        time.sleep(4.5)
-        self.assertWarningHidden()
+        self.assertWarningHides(6)
