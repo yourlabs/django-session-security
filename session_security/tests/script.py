@@ -22,7 +22,9 @@ class ScriptTestCase(LiveServerTestCase):
         password_input = self.browser.find_element_by_name("password")
         password_input.send_keys(password)
         self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
-        self.browser.implicitly_wait(10)
+
+        while self.warning_element() is False:
+            time.sleep(0.1)
 
     def press_space(self):
         a = ActionChains(self.browser)
@@ -57,11 +59,11 @@ class ScriptTestCase(LiveServerTestCase):
     def test_single_dont_show_warning(self):
         self.press_space()
 
-        time.sleep(4+1)  # Added one seconds to compensate for fadeIn
+        time.sleep(3+1)  # Added one seconds to compensate for fadeIn
         self.assertWarningHidden()
 
     def test_single_hide_warning(self):
-        time.sleep(4+1)  # Added one seconds to compensate for fadeIn
+        time.sleep(5+1)  # Added one seconds to compensate for fadeIn
         self.assertWarningShown()
 
         self.press_space()
@@ -86,15 +88,24 @@ class ScriptTestCase(LiveServerTestCase):
 
     def test_double_window_hide_warning(self):
         self.browser.execute_script('window.open("/admin/", "other")')
+        self.browser.switch_to_window(self.browser.window_handles[1])
+        while self.warning_element() is False:
+            time.sleep(0.1)
+        self.browser.switch_to_window(self.browser.window_handles[0])
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningHidden()
 
         time.sleep(5+1)  # Added one seconds to compensate for fadeIn
         for win in self.browser.window_handles:
             self.browser.switch_to_window(win)
             self.assertWarningShown()
 
+        time.sleep(3)
         self.press_space()
-
         time.sleep(4)
+
         for win in self.browser.window_handles:
             self.browser.switch_to_window(win)
             self.assertWarningHidden()
