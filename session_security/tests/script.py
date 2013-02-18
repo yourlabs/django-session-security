@@ -102,9 +102,13 @@ class ScriptTestCase(LiveServerTestCase):
             self.browser.switch_to_window(win)
             self.assertWarningShown()
 
-        time.sleep(4)
+        # Press space at 8th second
+        time.sleep(2)
         self.press_space()
-        time.sleep(4)
+
+        # Wait until the 11th second (after lastChance expire check) and both
+        # warnings should be hidden
+        time.sleep(3)
 
         for win in self.browser.window_handles:
             self.browser.switch_to_window(win)
