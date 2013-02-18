@@ -4,9 +4,6 @@ Quick setup
 The purpose of this documentation is to get you started as fast as possible,
 because your time matters and you probably have other things to worry about.
 
-Quick install
--------------
-
 Install the package::
 
     pip install django-session-security
@@ -41,12 +38,3 @@ then you're on your own to manage staticfiles.
 Add to your base template::
 
     {% include 'session_security/all.html' %}
-
-Quick setup
------------
-
-**Unless** ``pinax.apps.account`` is found in ``settings.INSTALLED_APPS``,
-configure these settings:
-
-- LOGIN_URL, the absolute url to your login view
-- LOGOUT_URL, the absolute url to your logout view
