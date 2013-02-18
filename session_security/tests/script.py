@@ -9,111 +9,102 @@ from selenium.common.exceptions import NoSuchElementException
 
 class ScriptTestCase(LiveServerTestCase):
     def setUp(self):
-        self.browsers = []
+        self.browser = WebDriver()
+        self.do_admin_login('test', 'test')
 
     def tearDown(self):
-        for browser in self.browsers:
-            browser.quit()
+        self.browser.quit()
 
-    def do_admin_login(self, username, password, browser):
-        browser.get('%s%s' % (self.live_server_url, '/admin/'))
-        username_input = browser.find_element_by_name("username")
+    def do_admin_login(self, username, password):
+        self.browser.get('%s%s' % (self.live_server_url, '/admin/'))
+        username_input = self.browser.find_element_by_name("username")
         username_input.send_keys(username)
-        password_input = browser.find_element_by_name("password")
+        password_input = self.browser.find_element_by_name("password")
         password_input.send_keys(password)
-        browser.find_element_by_xpath('//input[@value="Log in"]').click()
+        self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
+        self.browser.implicitly_wait(10)
 
-    def press_space(self, browser):
-        a = ActionChains(browser)
+    def press_space(self):
+        a = ActionChains(self.browser)
         a.key_down(Keys.SPACE)
         a.perform()
 
-    def warning_element(self, browser):
+    def warning_element(self):
         try:
-            return browser.find_elements_by_css_selector(
+            return self.browser.find_elements_by_css_selector(
                 '#session_security_warning')[0]
         except IndexError:
             return False
 
-    def assertWarningShown(self, browser):
-        self.assertTrue(self.warning_element(browser).is_displayed())
+    def assertWarningShown(self):
+        self.assertTrue(self.warning_element().is_displayed())
 
-    def assertWarningHidden(self, browser):
-        self.assertFalse(self.warning_element(browser).is_displayed())
+    def assertWarningHidden(self):
+        self.assertFalse(self.warning_element().is_displayed())
 
-    def assertWarningNotInPage(self, browser):
-        self.assertTrue(self.warning_element(browser) is False)
+    def assertWarningNotInPage(self):
+        self.assertTrue(self.warning_element() is False)
 
     def test_single_window_inactivity(self):
-        browser = WebDriver()
-        self.browsers.append(browser)
-        self.do_admin_login('test', 'test', browser)
-
-        time.sleep(2)
-        self.assertWarningHidden(browser)
-
-        time.sleep(3+1)  # Added one second to compensate for fadeIn
-        self.assertWarningShown(browser)
-
-        time.sleep(5+1)  # Added one second to compensate for lag
-        self.assertWarningNotInPage(browser)
-
-    def test_single_dont_show_warning(self):
-        browser = WebDriver()
-        self.browsers.append(browser)
-        self.do_admin_login('test', 'test', browser)
-
-        time.sleep(2)
-        self.press_space(browser)
-
-        time.sleep(3+1)  # Added one seconds to compensate for fadeIn
-        self.assertWarningHidden(browser)
-
-    def test_single_hide_warning(self):
-        browser = WebDriver()
-        self.browsers.append(browser)
-        self.do_admin_login('test', 'test', browser)
-
-        time.sleep(5+1)  # Added one seconds to compensate for fadeIn
-        self.assertWarningShown(browser)
-
-        self.press_space(browser)
-        self.assertWarningHidden(browser)
-
-    def test_double_window_inactivity(self):
-        # Disabled for now, see
-        # http://stackoverflow.com/questions/14900106/how-to-prevent-django-from-overriding-sessionid-cookie
-        #
-        # This test would be nice to have, but is not **required** since the
-        # new design which delegates all calculation of time left and next
-        # action to the server (PingView)
-        return
-
-        browser0 = WebDriver()
-        self.browsers.append(browser0)
-        self.do_admin_login('test', 'test', browser0)
-        cookie = browser0.get_cookie('sessionid')
-        cookies = {'name': 'sessionid', 'value': cookie['value']}
-
-        browser1 = WebDriver()
-        self.browsers.append(browser1)
-        browser1.add_cookie(cookies)
-        print 1, browser0.get_cookie('sessionid')['value']
-        print 2, browser1.get_cookie('sessionid')['value']
-        browser1.get('%s%s' % (self.live_server_url, '/admin/'))
-        print 3, browser0.get_cookie('sessionid')['value']
-        print 4, browser1.get_cookie('sessionid')['value']
-
-        self.assertEquals(browser0.get_cookie('sessionid'), browser1.get_cookie('sessionid'))
-
-        time.sleep(2)  # give time to authenticate
-        self.assertWarningHidden(browser0)
-        self.assertWarningHidden(browser1)
+        self.assertWarningHidden()
 
         time.sleep(5+1)  # Added one second to compensate for fadeIn
-        self.assertWarningShown(browser0)
-        self.assertWarningShown(browser1)
+        self.assertWarningShown()
 
         time.sleep(5+1)  # Added one second to compensate for lag
-        self.assertWarningNotInPage(browser0)
-        self.assertWarningNotInPage(browser1)
+        self.assertWarningNotInPage()
+
+    def test_single_dont_show_warning(self):
+        self.press_space()
+
+        time.sleep(4+1)  # Added one seconds to compensate for fadeIn
+        self.assertWarningHidden()
+
+    def test_single_hide_warning(self):
+        time.sleep(4+1)  # Added one seconds to compensate for fadeIn
+        self.assertWarningShown()
+
+        self.press_space()
+        self.assertWarningHidden()
+
+    def test_double_window_inactivity(self):
+        self.browser.execute_script('window.open("/admin/", "other")')
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningHidden()
+
+        time.sleep(5+1)  # Added one second to compensate for fadeIn
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningShown()
+
+        time.sleep(5+1)  # Added one second to compensate for lag
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningNotInPage()
+
+    def test_double_window_hide_warning(self):
+        self.browser.execute_script('window.open("/admin/", "other")')
+
+        time.sleep(5+1)  # Added one seconds to compensate for fadeIn
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningShown()
+
+        self.press_space()
+
+        time.sleep(4)
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningHidden()
+
+    def test_double_window_dont_show_warning(self):
+        self.browser.execute_script('window.open("/admin/", "other")')
+
+        self.press_space()
+        time.sleep(3+1)
+
+        for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+            self.assertWarningHidden()

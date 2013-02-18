@@ -1,22 +1,22 @@
 // Use 'yourlabs' as namespace.
 if (window.yourlabs == undefined) window.yourlabs = {};
 
-// Session security class.
-yourlabs.SessionSecurity = function(pingUrl) {
-    // Url to PingView.
-    this.pingUrl = pingUrl;
-
+// Session security constructor. These are the required options:
+//
+// - pingUrl: url to ping with last activity in this tab to get global last
+//   activity time,
+// - warnAfter: number of seconds of inactivity before warning,
+// - expireAfter: number of seconds of inactivity before expiring the session.
+yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
     this.$warning = $('#session_security_warning');
 
-    // A hack to anticipate clock skews. If the next event (warn or expire) is
-    // in 13 seconds and that timeRatio is 1.3, then it will hit PingView after
-    // 10 seconds (10/1.3). Adjust to your needs when you are asked to fine-tune.
-    this.timeRatio = 1.3;
-
     // Last recorded activity datetime.
     this.lastActivity = new Date();
+   
+    // Merge the options dict here.
+    $.extend(this, options);
 
     // Bind common activity events to update this.lastActivity.
     $(document)
@@ -24,54 +24,86 @@ yourlabs.SessionSecurity = function(pingUrl) {
         .keyup($.proxy(this.activity, this))
         .mousemove($.proxy(this.activity, this))
         .click($.proxy(this.activity, this))
-
-    // Ping to get the next event type and in how many seconds.
-    this.ping();
+   
+    // Initialize timers.
+    this.apply()
 }
 
 yourlabs.SessionSecurity.prototype = {
-    // Called when PingView responds with ['expire', <something lower than 0>].
+    // Called when there has been no activity for more than expireAfter
+    // seconds.
     expire: function() {
         window.location.reload()
     },
     
-    // Called when PingView responds with 
-    // ['expire', <something higher than 0>].
+    // Called when there has been no activity for more than warnAfter
+    // seconds.
     showWarning: function() {
         this.$warning.fadeIn('slow');
     },
     
-    // Called when PingView responds with ['warn', ...]
+    // Called to hide the warning, for example if there has been activity on
+    // the server side - in another browser tab.
     hideWarning: function() {
         this.$warning.hide();
     },
 
     // Called by click, scroll, mousemove, keyup.
     activity: function() {
-        this.hideWarning();
         this.lastActivity = new Date();
+
+        if (this.$warning.is(':visible')) {
+            // Inform the server that the user came back manually, this should
+            // block other browser tabs from expiring.
+            this.ping();
+        }
+
+        this.hideWarning();
     },
 
     // Hit the PingView with the number of seconds since last activity.
     ping: function() {
-        var inactiveSince = Math.floor((new Date() - this.lastActivity)
-            / 1000);
+        var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
-        $.post(this.pingUrl, {inactiveSince: inactiveSince},
-           $.proxy(this.pong, this), 'json');
+        $.ajax(this.pingUrl, {
+            data: {idleFor: idleFor},
+            cache: false,
+            success: $.proxy(this.pong, this),
+            // In case of network error, we still want to hide potentially
+            // confidential data !!
+            error: $.proxy(this.apply, this),
+            dataType: 'json',
+            type: 'post',
+        });
     },
 
     // Callback to process PingView response.
     pong: function(data) {
-        this.action = data[0];
-        this.time = data[1];        
+        if (data == 'logout') return this.expire();
 
-        if (this.action == 'expire') {
-            this.time <= 0 ? this.expire() : this.showWarning();
+        this.lastActivity = new Date();
+        this.lastActivity.setSeconds(this.lastActivity.getSeconds() - data);
+        this.apply();
+    },
+
+    // Apply warning or expiry, setup next ping
+    apply: function() {
+        // Cancel timeout if any, since we're going to make our own
+        clearTimeout(this.timeout);
+
+        var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
+
+        if (idleFor >= this.expireAfter) {
+            this.lastChance = !this.lastChance;
+            return this.lastChance ? this.ping() : this.expire();
+        } else if (idleFor >= this.warnAfter) {
+            this.showWarning();
+            nextPing = this.expireAfter - idleFor;
         } else {
             this.hideWarning();
+            nextPing = this.warnAfter - idleFor;
         }
-        this.timeout = setTimeout($.proxy(this.ping, this), 
-            (this.time / this.timeRatio) * 1000);
-    },
+
+        this.timeout = setTimeout($.proxy(this.ping, this), nextPing * 1000);
+    }
 }

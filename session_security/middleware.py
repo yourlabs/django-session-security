@@ -1,4 +1,16 @@
-import datetime
+"""
+SessionSecurityMiddleware is the heart of the security that this application
+attemps to provide.
+
+To install this middleware, add to your ``settings.MIDDLEWARE_CLASSES``::
+
+    'session_security.middleware.SessionSecurityMiddleware'
+
+Make sure that it is placed **after** authentication middlewares.
+"""
+
+import time
+from datetime import datetime, timedelta
 
 from django import http
 from django.contrib.auth import logout
@@ -8,42 +20,40 @@ from settings import *
 
 class SessionSecurityMiddleware(object):
     """
-    The heart of the security that this application attemps to provide.
-
-    To install this middleware, add to your ``settings.MIDDLEWARE_CLASSES``::
-
-        'session_security.middleware.SessionSecurityMiddleware'
-        
-    Make sure that it is placed **after** authentication middlewares.
+    In charge of maintaining the real 'last activity' time, and log out the
+    user if appropriate.
     """
 
     def process_request(self, request):
-        """
-        Set up ``request.session['session_security']`` if unset, logout and
-        redirect the user to ``LOGIN_URL?next=/the/path/`` if his session has
-        expired.
-
-        - If the user is not authenticated: do nothing.
-        - If the request url is in ``PASSIVE_URLS``: do nothing.
-        - If ``request.session['session_security']`` is unset: set it up.
-        - If the seconds elapsed since
-          ``request.session['session_security']['last_activity']`` exceeds
-          ``EXPIRE_AFTER``:
-            - Logout the user,
-            - Redirect to ``LOGIN_URL?next=/the/path/``.
-        - Otherwise: update
-          ``request.session['session_security']['last_activity']`` to now.
-        """
-
+        """ Update last activity time or logout. """
         if not request.user.is_authenticated():
             return
 
-        now = datetime.datetime.now()
-        request.session.setdefault('_session_security', now)
+        now = datetime.now()
+        self.update_last_activity(request, now)
 
         delta = now - request.session['_session_security']
-        if delta.seconds > EXPIRE_AFTER and request.path_info != LOGIN_URL:
+        if delta.seconds >= EXPIRE_AFTER:
             logout(request)
-            if request.is_ajax():
-                return http.HttpResponseRedirect(
-                    '%s?next=%s' % (LOGIN_URL, request.path_info))
+        elif request.path not in PASSIVE_URLS:
+            request.session['_session_security'] = now
+
+    def update_last_activity(self, request, now):
+        """
+        If ``request.POST['idleFor']`` is set, check if it refers to a more
+        recent activity than ``request.session['_session_security']`` and
+        update it in this case.
+        """
+        request.session.setdefault('_session_security', now)
+        last_activity = request.session['_session_security']
+        server_idle_for = (now - last_activity).seconds
+
+        if 'idleFor' in request.POST:
+            client_idle_for = int(request.POST['idleFor'])
+
+            if client_idle_for < server_idle_for:
+                # Client has more recent activity than we have in the session
+                last_activity = now - timedelta(seconds=client_idle_for)
+
+                # Update the session
+                request.session['_session_security'] = last_activity

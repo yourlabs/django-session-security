@@ -1,3 +1,6 @@
+""" One view method for AJAX requests by SessionSecurity objects. """
+import time
+
 from datetime import datetime, timedelta
 
 from django.contrib import auth
@@ -9,65 +12,15 @@ __all__ = ['PingView', ]
 
 class PingView(generic.View):
     """
-    View to update the last activity date time and get it.
+    This view is just in charge of returning the number of seconds since the
+    'real last activity' that is maintained in the session by the middleware.
     """
 
     def post(self, request, *args, **kwargs):
-        """
-        Return the **number of seconds since last activity**. Also, **update
-        session's last activity if** ``sinceActivity`` GET argument is passed
-        and superior to 0.
+        if '_session_security' not in request.session:
+            # It probably has expired already
+            return http.HttpResponse('logout')
 
-        - Use the ``sinceActivity`` and
-          ``request.session['session_security']['last_activity']`` to calculate
-          the last activity on the client (javascript), and on the server
-          (django).
-
-        - If the client reports a later last activity, then the session's last
-          activity variable is updated according to the client.
-
-        - Return the time since the last activity. Note that if the user
-          generates activity in a browser tab, but not in the other, both will
-          have the real last activity time because of this approach.
-
-        To just query the actual last activity, let ``sinceActivity`` inferior
-        to 0.
-        """
-        from settings import WARN_AFTER, EXPIRE_AFTER
-
-        if '_session_security' not in request.session.keys():
-            # Was logged out, maybe in another tab ?
-            return http.HttpResponse('["expire", -1]')
-
-        now = datetime.now()
-        last_activity = request.session['_session_security']
-        client_inactive_since = int(request.POST['inactiveSince'])
-        server_inactive_since = (now - last_activity).seconds
-
-        if client_inactive_since < server_inactive_since:
-            # Client has more recent activity than we have in the session,
-            # update the session.
-            last_activity = (now
-                - timedelta(seconds=client_inactive_since))
-
-            # Update the session
-            request.session['_session_security'] = last_activity
-
-        # We may now calculate how long the client has really been inactive
-        inactive_for = (now - last_activity).seconds
-
-        if inactive_for >= EXPIRE_AFTER:
-            # It should have expired already.
-            result = ('expire', -1)
-
-            # Logout for consistency, even thought the middleware will do it at
-            # next request on non-passive url.
-            auth.logout(request)
-        elif inactive_for >= WARN_AFTER:
-            # Next step is expiry.
-            result = ('expire', EXPIRE_AFTER - (now - last_activity).seconds)
-        else:
-            # Next step is the warning.
-            result = ('warn', WARN_AFTER - (now - last_activity).seconds)
-
-        return http.HttpResponse(u'["%s", %s]' % result)
+        inactive_for = (datetime.now() -
+            request.session['_session_security']).seconds
+        return http.HttpResponse(inactive_for)

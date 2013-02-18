@@ -6,6 +6,7 @@ It provides sensible defaults so you could start with just::
 
 {% endcomment %}
 
+{% load session_security_tags %}
 {% load i18n %}
 {% load url from future %}
 
@@ -70,6 +71,10 @@ It provides sensible defaults so you could start with just::
             }
         });
 
-        var sessionSecurity = new yourlabs.SessionSecurity('{% url 'session_security_ping' %}');
+        var sessionSecurity = new yourlabs.SessionSecurity({
+            pingUrl: '{% url 'session_security_ping' %}',
+            warnAfter: {{ request|warn_after }},
+            expireAfter: {{ request|expire_after }},
+        });
     </script>
 {% endif %}

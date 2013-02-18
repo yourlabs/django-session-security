@@ -14,22 +14,18 @@ class ViewsTestCase(unittest.TestCase):
     def test_anonymous(self):
         self.client.logout()
         self.client.get('/admin/')
-        response = self.client.post('/session_security/ping/', {'inactiveSince': '1'})
-        self.assertEqual(response.content, '["expire", -1]')
+        response = self.client.post('/session_security/ping/', {'inactiveFor': '1'})
+        self.assertEqual(response.content, 'logout')
 
     ping_provider = lambda: (
-        (1, 2, '["warn", 4]'),
-        (3, 2, '["warn", 3]'),
-        (0, 2, '["warn", 5]'),
-        (2, 0, '["warn", 5]'),
-        (5, 5, '["expire", 5]'),
-        (7, 9, '["expire", 3]'),
-        (8, 6, '["expire", 4]'),
-        (12, 14, '["expire", -1]'),
+        (1, 4, '1'),
+        (3, 2, '2'),
+        (5, 5, '5'),
+        (12, 14, 'logout', False),
     )
 
     @data_provider(ping_provider)
-    def test_ping(self, server, client, expected):
+    def test_ping(self, server, client, expected, authenticated=True):
         self.client.login(username='test', password='test')
         self.client.get('/admin/')
 
@@ -37,5 +33,7 @@ class ViewsTestCase(unittest.TestCase):
         session = self.client.session
         session['_session_security'] = now - timedelta(seconds=server)
         session.save()
-        response = self.client.post('/session_security/ping/', {'inactiveSince': client})
+        response = self.client.post('/session_security/ping/', {'idleFor': client})
+
         self.assertEqual(response.content, expected)
+        self.assertEqual(authenticated, '_auth_user_id' in self.client.session)
