@@ -7,6 +7,12 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 //   activity time,
 // - warnAfter: number of seconds of inactivity before warning,
 // - expireAfter: number of seconds of inactivity before expiring the session.
+//
+// Optional options:
+//
+// - confirmFormDiscard: message that will be shown when the user tries to
+//   leave a page with unsaved form data. Setting this will enable an
+//   onbeforeunload handler that doesn't block expire().
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
@@ -27,12 +33,18 @@ yourlabs.SessionSecurity = function(options) {
    
     // Initialize timers.
     this.apply()
+
+    if (this.confirmFormDiscard) {
+        window.onbeforeunload = $.proxy(this.onbeforeunload, this);
+        $(document).on('change', ':input', $.proxy(this.formChange, this));
+    }
 }
 
 yourlabs.SessionSecurity.prototype = {
     // Called when there has been no activity for more than expireAfter
     // seconds.
     expire: function() {
+        this.expired = true;
         window.location.reload()
     },
     
@@ -94,8 +106,7 @@ yourlabs.SessionSecurity.prototype = {
         var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
         if (idleFor >= this.expireAfter) {
-            this.lastChance = !this.lastChance;
-            return this.lastChance ? this.ping() : this.expire();
+            return this.expire();
         } else if (idleFor >= this.warnAfter) {
             this.showWarning();
             nextPing = this.expireAfter - idleFor;
@@ -105,5 +116,17 @@ yourlabs.SessionSecurity.prototype = {
         }
 
         this.timeout = setTimeout($.proxy(this.ping, this), nextPing * 1000);
+    },
+
+    // onbeforeunload handler.
+    onbeforeunload: function(e) {
+        if ($('form[data-dirty]').length && !this.expired) {
+            return this.confirmFormDiscard;
+        }
+    },
+
+    // When an input change, set data-dirty attribute on its form.
+    formChange: function(e) {
+        $(e.target).closest('form').attr('data-dirty', true);
     }
 }

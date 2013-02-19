@@ -28,6 +28,7 @@ It provides sensible defaults so you could start with just::
             pingUrl: '{% url 'session_security_ping' %}',
             warnAfter: {{ request|warn_after }},
             expireAfter: {{ request|expire_after }},
+            confirmFormDiscard: "{% 'You have unsaved changes in a form of this page.' %}",
         });
     </script>
 {% endif %}
