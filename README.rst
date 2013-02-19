@@ -1,4 +1,4 @@
-.. .. image:: https://secure.travis-ci.org/yourlabs/django-session-security.png?branch=master
+.. image:: https://secure.travis-ci.org/yourlabs/django-session-security.png?branch=master
 
 This app provides a mechanism to logout inactive authenticated users. An
 inactive browser should be logged out automatically if the user left his
@@ -80,6 +80,9 @@ package updates.
 - `Mailing list graciously hosted
   <http://groups.google.com/group/yourlabs>`_ by `Google
   <http://groups.google.com>`_
+- `Continuous integration graciously hosted
+  <http://travis-ci.org/yourlabs/django-session-security>`_ by `Travis-ci
+  <http://travis-ci.org>`_
 
 .. Continuous integration graciously hosted by Travis:
 .. http://travis-ci.org/yourlabs/django-session-security
