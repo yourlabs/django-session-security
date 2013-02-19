@@ -1,2 +1,6 @@
 *.pyc
 django_session_security.egg-info
+.ropeproject
+dist
+docs/build
+docs/source/_static/
