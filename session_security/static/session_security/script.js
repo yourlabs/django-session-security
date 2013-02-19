@@ -73,7 +73,7 @@ yourlabs.SessionSecurity.prototype = {
             // confidential data !!
             error: $.proxy(this.apply, this),
             dataType: 'json',
-            type: 'post',
+            type: 'get',
         });
     },
 

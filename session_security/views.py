@@ -16,7 +16,7 @@ class PingView(generic.View):
     'real last activity' that is maintained in the session by the middleware.
     """
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if '_session_security' not in request.session:
             # It probably has expired already
             return http.HttpResponse('logout')

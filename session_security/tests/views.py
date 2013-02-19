@@ -14,7 +14,7 @@ class ViewsTestCase(unittest.TestCase):
     def test_anonymous(self):
         self.client.logout()
         self.client.get('/admin/')
-        response = self.client.post('/session_security/ping/', {'inactiveFor': '1'})
+        response = self.client.get('/session_security/ping/?idleFor=1')
         self.assertEqual(response.content, 'logout')
 
     ping_provider = lambda: (
@@ -33,7 +33,8 @@ class ViewsTestCase(unittest.TestCase):
         session = self.client.session
         session['_session_security'] = now - timedelta(seconds=server)
         session.save()
-        response = self.client.post('/session_security/ping/', {'idleFor': client})
+        response = self.client.get('/session_security/ping/?idleFor=%s' %
+                                   client)
 
         self.assertEqual(response.content, expected)
         self.assertEqual(authenticated, '_auth_user_id' in self.client.session)

@@ -40,7 +40,7 @@ class SessionSecurityMiddleware(object):
 
     def update_last_activity(self, request, now):
         """
-        If ``request.POST['idleFor']`` is set, check if it refers to a more
+        If ``request.GET['idleFor']`` is set, check if it refers to a more
         recent activity than ``request.session['_session_security']`` and
         update it in this case.
         """
@@ -48,8 +48,8 @@ class SessionSecurityMiddleware(object):
         last_activity = request.session['_session_security']
         server_idle_for = (now - last_activity).seconds
 
-        if 'idleFor' in request.POST:
-            client_idle_for = int(request.POST['idleFor'])
+        if 'idleFor' in request.GET:
+            client_idle_for = int(request.GET['idleFor'])
 
             if client_idle_for < server_idle_for:
                 # Client has more recent activity than we have in the session

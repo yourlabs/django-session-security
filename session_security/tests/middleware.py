@@ -32,7 +32,7 @@ class MiddlewareTestCase(unittest.TestCase):
         self.client.login(username='test', password='test')
         response = self.client.get('/admin/')
         time.sleep(8)
-        response = self.client.post('/session_security/ping/', {'idleFor': '1'})
+        response = self.client.get('/session_security/ping/?idleFor=1')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(4)
         response = self.client.get('/admin/')
