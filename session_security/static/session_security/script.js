@@ -37,6 +37,7 @@ yourlabs.SessionSecurity = function(options) {
     if (this.confirmFormDiscard) {
         window.onbeforeunload = $.proxy(this.onbeforeunload, this);
         $(document).on('change', ':input', $.proxy(this.formChange, this));
+        $(document).on('submit', 'form', $.proxy(this.formSubmit, this));
     }
 }
 
@@ -128,5 +129,11 @@ yourlabs.SessionSecurity.prototype = {
     // When an input change, set data-dirty attribute on its form.
     formChange: function(e) {
         $(e.target).closest('form').attr('data-dirty', true);
-    }
+    },
+
+    // When a form is submited, unset data-dirty attribute.
+    formSubmit: function(e) {
+        console.log($(e.target))
+        $(e.target).removeAttr('data-dirty');
+    },
 }
