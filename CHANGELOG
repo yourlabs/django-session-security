@@ -1,3 +1,5 @@
+2.0.2 Added confirmFormDiscard and onbeforeunload handler.
+
 2.0.1 Traded POST ping request for a GET ping request, removed CSRF code.
 
 2.0.0 Rewrite with unit tests.
