@@ -35,6 +35,6 @@ and that you have to run `collectstatic when using another server
 (fastcgi, uwsgi, and whatnot). If you don't use django.contrib.staticfiles,
 then you're on your own to manage staticfiles.
 
-Add to your base template::
+After jQuery, add to your base template::
 
     {% include 'session_security/all.html' %}
