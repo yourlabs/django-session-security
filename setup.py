@@ -62,7 +62,7 @@ setup(
     description='Let the user secure his session for usage in public computers',
     author='James Pic',
     author_email='jamespic@gmail.com',
-    url='https://github.com/yourlabs/django-session-expiry',
+    url='https://github.com/yourlabs/django-session-security',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
