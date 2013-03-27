@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 
 from django import http
 from django.contrib.auth import logout
+from django.core.urlresolvers import reverse
 
 from settings import *
 
@@ -48,9 +49,17 @@ class SessionSecurityMiddleware(object):
         last_activity = request.session['_session_security']
         server_idle_for = (now - last_activity).seconds
 
-        if 'idleFor' in request.GET:
-            client_idle_for = int(request.GET['idleFor'])
+        if request.path == reverse('session_security_ping') and 'idleFor' in request.GET:
+            # Gracefully ignore non-integer values
+            try:
+                client_idle_for = int(request.GET['idleFor'])
+            except ValueError:
+                return
+            
+            # Do not allow negative values since delta would be calculated incorrectly 
+            if client_idle_for < 0: client_idle_for = 0 
 
+            
             if client_idle_for < server_idle_for:
                 # Client has more recent activity than we have in the session
                 last_activity = now - timedelta(seconds=client_idle_for)
