@@ -1,0 +1,29 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h2>Simulate long running request</h2>
+
+Set an amount of seconds and focusout of this field:
+<input name="seconds" />
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script type="text/javascript">
+    $(document).ready(function(){
+        function longRunningRequest() {
+            $.get(
+                '{% url "sleep" %}', 
+                {seconds: $('input[name=seconds]').val()}, 
+                function(data, textStatus, jqXHR) {
+                    longRunningRequest();
+                }
+            )
+        }
+
+        $('input[name=seconds]').blur(function() {
+            longRunningRequest()
+        });
+    });
+</script>
+{% endblock %}
