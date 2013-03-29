@@ -56,11 +56,11 @@ class SessionSecurityMiddleware(object):
                 client_idle_for = int(request.GET['idleFor'])
             except ValueError:
                 return
-            
-            # Do not allow negative values since delta would be calculated incorrectly 
+
+            # Disallow negative values, causes problems with delta calculation
             if client_idle_for < 0:
                 client_idle_for = 0
-            
+
             if client_idle_for < server_idle_for:
                 # Client has more recent activity than we have in the session
                 last_activity = now - timedelta(seconds=client_idle_for)
