@@ -2,6 +2,7 @@ import time
 from datetime import datetime, timedelta
 import unittest
 
+from django.test.utils import override_settings
 from django.test.client import Client
 
 from unittest_data_provider import data_provider

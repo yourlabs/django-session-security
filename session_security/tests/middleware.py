@@ -2,8 +2,6 @@ import time
 import unittest
 
 from django.test.client import Client
-from django.test.utils import override_settings
-
 
 
 class MiddlewareTestCase(unittest.TestCase):
