@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% load static %}
 
 {% block branding %}
 <h1>session-security demo</h1>
@@ -6,6 +7,6 @@
 
 {% block footer %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}/jquery.js" type="text/javascript"></script>
+    <script src="{% static 'jquery.js' %}" type="text/javascript"></script>
     {% include 'session_security/all.html' %}
 {% endblock %}
