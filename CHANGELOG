@@ -1,3 +1,5 @@
+2.0.4 Fix #4: Removed debug statement.
+
 2.0.3 Unset data-dirty on form submit, to prevent onbeforeunload.
 
 2.0.2 Added confirmFormDiscard and onbeforeunload handler.
