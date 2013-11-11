@@ -13,6 +13,7 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 // - confirmFormDiscard: message that will be shown when the user tries to
 //   leave a page with unsaved form data. Setting this will enable an
 //   onbeforeunload handler that doesn't block expire().
+// - events: a list of event types to watch for activity updates.
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
@@ -20,16 +21,17 @@ yourlabs.SessionSecurity = function(options) {
 
     // Last recorded activity datetime.
     this.lastActivity = new Date();
+
+    // Events that would trigger an activity
+    this.events = ['mousemove', 'scroll', 'keyup', 'click'];
    
     // Merge the options dict here.
     $.extend(this, options);
 
-    // Bind common activity events to update this.lastActivity.
-    $(document)
-        .scroll($.proxy(this.activity, this))
-        .keyup($.proxy(this.activity, this))
-        .mousemove($.proxy(this.activity, this))
-        .click($.proxy(this.activity, this))
+    // Bind activity events to update this.lastActivity.
+    for(var i=0; i<this.events.length; i++) {
+        $(document)[this.events[i]]($.proxy(this.activity, this))
+    }
    
     // Initialize timers.
     this.apply()
