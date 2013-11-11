@@ -136,5 +136,5 @@ yourlabs.SessionSecurity.prototype = {
     // When a form is submited, unset data-dirty attribute.
     formSubmit: function(e) {
         $(e.target).removeAttr('data-dirty');
-    },
+    }
 }
