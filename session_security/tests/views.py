@@ -22,7 +22,7 @@ class ViewsTestCase(unittest.TestCase):
         response = self.client.get('/session_security/ping/?idleFor=1')
         self.assertEqual(response.content, six.b('logout'))
 
-    ping_provider = lambda: (
+    ping_provider = lambda x=None: (
         (1, 4, '1'),
         (3, 2, '2'),
         (5, 5, '5'),
