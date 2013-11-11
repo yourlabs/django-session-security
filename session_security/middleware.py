@@ -16,7 +16,7 @@ from django import http
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
-from settings import *
+from .settings import *
 
 
 class SessionSecurityMiddleware(object):

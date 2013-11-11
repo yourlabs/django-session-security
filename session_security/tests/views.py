@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+import six
+
 import time
 from datetime import datetime, timedelta
 import unittest
@@ -16,7 +20,7 @@ class ViewsTestCase(unittest.TestCase):
         self.client.logout()
         self.client.get('/admin/')
         response = self.client.get('/session_security/ping/?idleFor=1')
-        self.assertEqual(response.content, 'logout')
+        self.assertEqual(response.content, six.b('logout'))
 
     ping_provider = lambda: (
         (1, 4, '1'),
@@ -37,5 +41,5 @@ class ViewsTestCase(unittest.TestCase):
         response = self.client.get('/session_security/ping/?idleFor=%s' %
                                    client)
 
-        self.assertEqual(response.content, expected)
+        self.assertEqual(response.content, six.b(expected))
         self.assertEqual(authenticated, '_auth_user_id' in self.client.session)

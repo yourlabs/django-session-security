@@ -14,10 +14,12 @@ ie::
     )
 
 """
+try:
+    from django.conf.urls.defaults import url, patterns
+except ImportError:
+    from django.conf.urls import url, patterns
 
-from django.conf.urls.defaults import url, patterns
-
-from views import PingView
+from .views import PingView
 
 urlpatterns = patterns('',
     url(
