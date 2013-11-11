@@ -48,7 +48,7 @@ yourlabs.SessionSecurity.prototype = {
     // seconds.
     expire: function() {
         this.expired = true;
-        window.location.reload()
+        window.location.reload();
     },
     
     // Called when there has been no activity for more than warnAfter
@@ -88,7 +88,7 @@ yourlabs.SessionSecurity.prototype = {
             // confidential data !!
             error: $.proxy(this.apply, this),
             dataType: 'json',
-            type: 'get',
+            type: 'get'
         });
     },
 
