@@ -23,6 +23,6 @@ class PingView(generic.View):
             # It probably has expired already
             return http.HttpResponse('logout')
 
-        last_activity = get_last_activity(request)
+        last_activity = get_last_activity(request.session)
         inactive_for = (datetime.now() - last_activity).seconds
         return http.HttpResponse(inactive_for)

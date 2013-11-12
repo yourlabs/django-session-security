@@ -34,11 +34,11 @@ class SessionSecurityMiddleware(object):
         now = datetime.now()
         self.update_last_activity(request, now)
 
-        delta = now - get_last_activity(request)
+        delta = now - get_last_activity(request.session)
         if delta.seconds >= EXPIRE_AFTER:
             logout(request)
         elif request.path not in PASSIVE_URLS:
-            set_last_activity(request, now)
+            set_last_activity(request.session, now)
 
     def update_last_activity(self, request, now):
         """
@@ -47,9 +47,9 @@ class SessionSecurityMiddleware(object):
         update it in this case.
         """
         if '_session_security' not in request.session:
-            set_last_activity(request, now)
+            set_last_activity(request.session, now)
 
-        last_activity = get_last_activity(request)
+        last_activity = get_last_activity(request.session)
         server_idle_for = (now - last_activity).seconds
 
         if (request.path == reverse('session_security_ping') and
@@ -69,4 +69,4 @@ class SessionSecurityMiddleware(object):
                 last_activity = now - timedelta(seconds=client_idle_for)
 
                 # Update the session
-                set_last_activity(request, last_activity)
+                set_last_activity(request.session, last_activity)

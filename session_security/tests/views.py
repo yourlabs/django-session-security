@@ -11,6 +11,8 @@ from django.test.client import Client
 
 from unittest_data_provider import data_provider
 
+from session_security.utils import set_last_activity
+
 
 class ViewsTestCase(unittest.TestCase):
     def setUp(self):
@@ -36,7 +38,7 @@ class ViewsTestCase(unittest.TestCase):
 
         now = datetime.now()
         session = self.client.session
-        session['_session_security'] = now - timedelta(seconds=server)
+        set_last_activity(session, now - timedelta(seconds=server))
         session.save()
         response = self.client.get('/session_security/ping/?idleFor=%s' %
                                    client)
