@@ -13,6 +13,12 @@ Middleware
 .. automodule:: session_security.middleware
    :members:
 
+Utils
+-----
+
+.. automodule:: session_security.utils
+   :members:
+
 Urls
 ----
 
