@@ -1,3 +1,9 @@
+2.1.1
+
+    - Fixed AUTHORS,
+    - Added utils to full documentation.
+    - Promoted to Production/Stable.
+
 2.1.0
 
     - Django 1.5 and 1.6 support.
