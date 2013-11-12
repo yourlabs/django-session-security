@@ -1,3 +1,14 @@
+2.1.0
+
+    - Django 1.5 and 1.6 support.
+    - Fix #6: Internet Explorer 8 support.
+    - Python 3.3 support.
+    - Minor BC break: we can't set datetime objects directly in the session
+      since django 1.6. Instead, we go through session_security.utils functions
+      get_last_activity() and set_last_activity(). If you were touching
+      session['_session_security'] directly, you should update your code to use
+      those functions.
+
 2.0.6 Fix #5: Make the list of event types to monitor an option.
 
 2.0.5 Removed more debug statements.
