@@ -7,6 +7,8 @@ from django.contrib import auth
 from django.views import generic
 from django import http
 
+from .utils import get_last_activity
+
 __all__ = ['PingView', ]
 
 
@@ -21,6 +23,6 @@ class PingView(generic.View):
             # It probably has expired already
             return http.HttpResponse('logout')
 
-        inactive_for = (datetime.now() -
-            request.session['_session_security']).seconds
+        last_activity = get_last_activity(request)
+        inactive_for = (datetime.now() - last_activity).seconds
         return http.HttpResponse(inactive_for)

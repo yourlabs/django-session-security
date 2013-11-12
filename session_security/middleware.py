@@ -16,7 +16,8 @@ from django import http
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
-from .settings import *
+from .utils import get_last_activity, set_last_activity
+from .settings import EXPIRE_AFTER, PASSIVE_URLS
 
 
 class SessionSecurityMiddleware(object):
@@ -33,11 +34,11 @@ class SessionSecurityMiddleware(object):
         now = datetime.now()
         self.update_last_activity(request, now)
 
-        delta = now - request.session['_session_security']
+        delta = now - get_last_activity(request)
         if delta.seconds >= EXPIRE_AFTER:
             logout(request)
         elif request.path not in PASSIVE_URLS:
-            request.session['_session_security'] = now
+            set_last_activity(request, now)
 
     def update_last_activity(self, request, now):
         """
@@ -45,8 +46,10 @@ class SessionSecurityMiddleware(object):
         recent activity than ``request.session['_session_security']`` and
         update it in this case.
         """
-        request.session.setdefault('_session_security', now)
-        last_activity = request.session['_session_security']
+        if '_session_security' not in request.session:
+            set_last_activity(request, now)
+
+        last_activity = get_last_activity(request)
         server_idle_for = (now - last_activity).seconds
 
         if (request.path == reverse('session_security_ping') and
@@ -66,4 +69,4 @@ class SessionSecurityMiddleware(object):
                 last_activity = now - timedelta(seconds=client_idle_for)
 
                 # Update the session
-                request.session['_session_security'] = last_activity
+                set_last_activity(request, last_activity)
