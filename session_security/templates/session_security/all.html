@@ -9,18 +9,19 @@ It provides sensible defaults so you could start with just::
 {% load session_security_tags %}
 {% load i18n %}
 {% load url from future %}
+{% load static from staticfiles %}
 
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}
 
     {# The modal dialog stylesheet, it's pretty light so it should be easy to hack #}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}session_security/style.css"></link>
+    <link rel="stylesheet" type="text/css" href="{% static 'session_security/style.css' %}"></link>
 
     {# Include the template that actually contains the modal dialog #}
     {% include 'session_security/dialog.html' %}
 
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
-    <script type="text/javascript" src="{{ STATIC_URL }}session_security/script.js"></script>
+    <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>
 
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
     <script type="text/javascript">
