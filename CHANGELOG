@@ -1,3 +1,5 @@
+2.1.2 Use {% static %} instead of {{ STATIC_URL }} in all.html
+
 2.1.1
 
     - Fixed AUTHORS,
