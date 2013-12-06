@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-19 16:28+0100\n"
-"PO-Revision-Date: 2013-02-19 16:26+0100\n"
-"Last-Translator: James Pic <jamespic@gmail.com>\n"
-"Language: French\n"
+"POT-Creation-Date: 2013-12-06 18:00-0300\n"
+"PO-Revision-Date: 2013-12-06 18:00-0300\n"
+"Last-Translator: Fabio Caritas Barrionuevo da Luz <bnafta at gmail.com>\n"
+"Language: Brazilian Portuguese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,12 +17,12 @@ msgstr ""
 
 #: templates/session_security/all.html:32
 msgid "You have unsaved changes in a form of this page."
-msgstr "Vous avez des changements non sauvegardé dans un formulaire de cette page."
+msgstr "Você tem alterações não salvas em um formulário desta página."
 
 #: templates/session_security/dialog.html:6
 msgid "Your session is about to expire"
-msgstr "Votre session est sur le point d'expirer"
+msgstr "Sua sessão está prestes a expirar"
 
 #: templates/session_security/dialog.html:7
 msgid "Click to extend your session."
-msgstr "Touchez la souris pour étendre la durée de votre session."
+msgstr "Clique para prolongar a sua sessão."
