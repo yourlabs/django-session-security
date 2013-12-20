@@ -1,9 +1,7 @@
 """ One view method for AJAX requests by SessionSecurity objects. """
-import time
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from django.contrib import auth
 from django.views import generic
 from django import http
 

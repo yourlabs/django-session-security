@@ -10,10 +10,8 @@ Make sure that it is placed **after** authentication middlewares
 and message middleware.
 """
 
-import time
 from datetime import datetime, timedelta
 
-from django import http
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.contrib import messages
