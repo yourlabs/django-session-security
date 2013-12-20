@@ -6,7 +6,7 @@ To install this middleware, add to your ``settings.MIDDLEWARE_CLASSES``::
 
     'session_security.middleware.SessionSecurityMiddleware'
 
-Make sure that it is placed **after** authentication middlewares.
+Make sure that it is placed **after** authentication middlewares and message middleware.
 """
 
 import time
@@ -15,9 +15,12 @@ from datetime import datetime, timedelta
 from django import http
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS
+from .settings import (EXPIRE_AFTER, PASSIVE_URLS, 
+                       SHOW_MESSAGE_AFTER_AUTO_LOGOUT)
 
 
 class SessionSecurityMiddleware(object):
@@ -36,6 +39,8 @@ class SessionSecurityMiddleware(object):
 
         delta = now - get_last_activity(request.session)
         if delta.seconds >= EXPIRE_AFTER:
+            if SHOW_MESSAGE_AFTER_AUTO_LOGOUT:
+                messages.info(request, _('You have been disconnected because it became too long without activity.'))
             logout(request)
         elif request.path not in PASSIVE_URLS:
             set_last_activity(request.session, now)
