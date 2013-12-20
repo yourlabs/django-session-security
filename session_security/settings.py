@@ -19,7 +19,8 @@ PASSIVE_URLS
 SHOW_MESSAGE_AFTER_AUTO_LOGOUT
     Use django message framework to inform who hears logout for inactivity.
     Default is True.
-    Overridable in ``settings.SESSION_SECURITY_SHOW_MESSAGE_AFTER_AUTO_LOGOUT``.
+    Overridable in
+    ``settings.SESSION_SECURITY_SHOW_MESSAGE_AFTER_AUTO_LOGOUT``.
 
 Note that this module will raise a warning if
 ``settings.SESSION_EXPIRE_AT_BROWSER_CLOSE`` is not True, because it makes no
@@ -31,7 +32,7 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS', 
+__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS',
            'SHOW_MESSAGE_AFTER_AUTO_LOGOUT']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
@@ -43,7 +44,8 @@ PASSIVE_URLS += [
     urlresolvers.reverse('session_security_ping'),
 ]
 
-SHOW_MESSAGE_AFTER_AUTO_LOGOUT = getattr(settings, 'SESSION_SECURITY_SHOW_MESSAGE_AFTER_AUTO_LOGOUT', True)
+SHOW_MESSAGE_AFTER_AUTO_LOGOUT = getattr(settings,
+                'SESSION_SECURITY_SHOW_MESSAGE_AFTER_AUTO_LOGOUT', True)
 
 if not getattr(settings, 'SESSION_EXPIRE_AT_BROWSER_CLOSE', False):
     warnings.warn('settings.SESSION_EXPIRE_AT_BROWSER_CLOSE is not True')
