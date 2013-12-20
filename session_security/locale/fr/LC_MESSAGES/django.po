@@ -15,6 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: middleware.py:43
+msgid "You have been disconnected because it became too long without activity."
+msgstr "Vous avez été déconnecté car il est devenu trop longtemps sans activité."
+
 #: templates/session_security/all.html:32
 msgid "You have unsaved changes in a form of this page."
 msgstr "Vous avez des changements non sauvegardé dans un formulaire de cette page."
