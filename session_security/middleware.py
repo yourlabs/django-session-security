@@ -35,7 +35,7 @@ class SessionSecurityMiddleware(object):
         self.update_last_activity(request, now)
 
         delta = now - get_last_activity(request.session)
-        if delta.seconds >= EXPIRE_AFTER and delta.days >= 0:
+        if delta >= timedelta(seconds=EXPIRE_AFTER):
             logout(request)
         elif request.path not in PASSIVE_URLS:
             set_last_activity(request.session, now)
