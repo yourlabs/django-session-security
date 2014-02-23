@@ -7,7 +7,7 @@ It provides sensible defaults so you could start with just::
 {% endcomment %}
 
 {% load session_security_tags %}
-{% load i18n %}
+{% load i18n l10n %}
 {% load url from future %}
 {% load static from staticfiles %}
 
@@ -24,12 +24,14 @@ It provides sensible defaults so you could start with just::
     <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>
 
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
-    <script type="text/javascript">
-        var sessionSecurity = new yourlabs.SessionSecurity({
-            pingUrl: '{% url 'session_security_ping' %}',
-            warnAfter: {{ request|warn_after }},
-            expireAfter: {{ request|expire_after }},
-            confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
-        });
-    </script>
+    {% localize off %}
+        <script type="text/javascript">
+            var sessionSecurity = new yourlabs.SessionSecurity({
+                pingUrl: '{% url 'session_security_ping' %}',
+                warnAfter: {{ request|warn_after|unlocalize }},
+                expireAfter: {{ request|expire_after|unlocalize }},
+                confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
+            });
+        </script>
+    {% endlocalize %}    
 {% endif %}
