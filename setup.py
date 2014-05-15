@@ -57,7 +57,7 @@ else:
 
 setup(
     name='django-session-security',
-    version='2.1.6',
+    version='2.1.7',
     description='Let the user secure his session for usage in public computers',
     author='James Pic',
     author_email='jamespic@gmail.com',
