@@ -1,3 +1,5 @@
+2.2.0: Pre-build .mo.
+
 2.1.7 #19: Use consistent formatting
 for the datetime. Fixes random failures
 in test suites. By Scott Sexton.
