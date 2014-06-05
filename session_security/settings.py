@@ -10,6 +10,10 @@ EXPIRE_AFTER
     Time (in seconds) before the user should be logged out if inactive. Default
     is 600. Overridable in ``settings.SESSION_SECURITY_EXPIRE_AFTER``.
 
+EXPIRE_AFTER_CUSTOM_SESSION_KEY
+    Session key to set a custom EXPIRE_AFTER value. Default is None
+    Use case: per-user EXPIRE_AFTER
+
 PASSIVE_URLS
     List of urls that should be ignored by the middleware. For example the ping
     ajax request of session_security is made without user intervention, as such
@@ -29,6 +33,8 @@ from django.conf import settings
 __all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
+
+EXPIRE_AFTER_CUSTOM_SESSION_KEY = getattr(settings, 'EXPIRE_AFTER_CUSTOM_SESSION_KEY', None)
 
 WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 

@@ -17,7 +17,7 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS
+from .settings import EXPIRE_AFTER, EXPIRE_AFTER_CUSTOM_SESSION_KEY, PASSIVE_URLS
 
 
 class SessionSecurityMiddleware(object):
@@ -35,7 +35,13 @@ class SessionSecurityMiddleware(object):
         self.update_last_activity(request, now)
 
         delta = now - get_last_activity(request.session)
-        if delta >= timedelta(seconds=EXPIRE_AFTER):
+
+        expire_after_value = EXPIRE_AFTER
+        if EXPIRE_AFTER_CUSTOM_SESSION_KEY is not None:
+            expire_after_value = request.session.get(
+                EXPIRE_AFTER_CUSTOM_SESSION_KEY, EXPIRE_AFTER)
+
+        if delta >= timedelta(seconds=expire_after_value):
             logout(request)
         elif request.path not in PASSIVE_URLS:
             set_last_activity(request.session, now)
