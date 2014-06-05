@@ -11,7 +11,8 @@ EXPIRE_AFTER
     is 600. Overridable in ``settings.SESSION_SECURITY_EXPIRE_AFTER``.
 
 EXPIRE_AFTER_CUSTOM_SESSION_KEY
-    Session key to set a custom EXPIRE_AFTER value. Default is None
+    Session key to set a custom EXPIRE_AFTER value. Default is ``None``
+    Override in ``settings.SESSION_SECURITY_CUSTOM_SESSION_KEY``
     Use case: per-user EXPIRE_AFTER
 
 PASSIVE_URLS
@@ -34,7 +35,7 @@ __all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
-EXPIRE_AFTER_CUSTOM_SESSION_KEY = getattr(settings, 'EXPIRE_AFTER_CUSTOM_SESSION_KEY', None)
+EXPIRE_AFTER_CUSTOM_SESSION_KEY = getattr(settings, 'SESSION_SECURITY_CUSTOM_SESSION_KEY', None)
 
 WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 
