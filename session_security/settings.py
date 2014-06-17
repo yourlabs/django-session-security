@@ -37,7 +37,8 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_BEFORE', 'WARN_AFTER', 'PASSIVE_URLS']
+__all__ = ['EXPIRE_AFTER', 'WARN_BEFORE', 'WARN_AFTER',
+           'PASSIVE_URLS', 'EXPIRE_AFTER_CUSTOM_SESSION_KEY']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
@@ -75,7 +76,10 @@ def get_expire_after(request):
         EXPIRE_AFTER_CUSTOM_SESSION_KEY
     )
 
-    return expire_after_value if expire_after_value >= 60 else EXPIRE_AFTER
+    if type(expire_after_value) == int and expire_after_value > 0:
+        return expire_after_value
+    else:
+        return EXPIRE_AFTER
 
 
 def get_warn_after(request):
