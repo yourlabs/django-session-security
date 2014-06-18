@@ -76,7 +76,7 @@ def get_expire_after(request):
         EXPIRE_AFTER_CUSTOM_SESSION_KEY
     )
 
-    if type(expire_after_value) == int and expire_after_value > 0:
+    if isinstance(expire_after_value, int) and expire_after_value > 0:
         return expire_after_value
     else:
         return EXPIRE_AFTER
