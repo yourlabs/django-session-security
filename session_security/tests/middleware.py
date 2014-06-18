@@ -15,10 +15,10 @@ class MiddlewareTestCase(unittest.TestCase):
 
     def test_auto_logout(self):
         self.client.login(username='test', password='test')
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(12)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertFalse('_auth_user_id' in self.client.session)
 
     def test_last_activity_in_future(self):
@@ -26,27 +26,27 @@ class MiddlewareTestCase(unittest.TestCase):
         now = datetime.now()
         future = now + timedelta(0, 30)
         set_last_activity(self.client.session, future)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
 
     def test_non_javascript_browse_no_logout(self):
         self.client.login(username='test', password='test')
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         time.sleep(8)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(4)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
 
     def test_javascript_activity_no_logout(self):
         self.client.login(username='test', password='test')
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         time.sleep(8)
-        response = self.client.get('/session_security/ping/?idleFor=1')
+        self.client.get('/session_security/ping/?idleFor=1')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(4)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
 
 
@@ -78,19 +78,19 @@ class DynamicSessionLevelTestCase(DjangoTestCase):
         s.save()
 
     def test_global_session_value_logout(self):
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(4)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertFalse('_auth_user_id' in self.client.session)
 
     def test_dynamic_session_value_logout(self):
         self.set_custom_expire_after_value(2)
 
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
         self.assertTrue('user-auto-logout' in self.client.session)
         self.assertEqual(self.client.session.get('user-auto-logout'), 2)
         time.sleep(3)
-        response = self.client.get('/admin/')
+        self.client.get('/admin/')
         self.assertFalse('_auth_user_id' in self.client.session)

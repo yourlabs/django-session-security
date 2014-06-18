@@ -16,7 +16,8 @@ class SleepView(generic.TemplateView):
         time.sleep(int(request.GET.get('seconds', 0)))
         return super(SleepView, self).get(request, *args, **kwargs)
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^favicon\.ico$', generic.RedirectView.as_view(
         url=settings.STATIC_URL + '/favicon.ico')),
     url(r'^$', generic.TemplateView.as_view(template_name='home.html')),

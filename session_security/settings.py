@@ -17,7 +17,7 @@ EXPIRE_AFTER
     is 600. Can be set in ``settings.SESSION_SECURITY_EXPIRE_AFTER``.
 
 EXPIRE_AFTER_CUSTOM_SESSION_KEY
-    Session key to set a custom EXPIRE_AFTER value. Can be set in 
+    Session key to set a custom EXPIRE_AFTER value. Can be set in
     ``settings.SESSION_SECURITY_CUSTOM_SESSION_KEY``
     Use case: per-user EXPIRE_AFTER
 
