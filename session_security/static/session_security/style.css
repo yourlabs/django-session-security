@@ -1,6 +1,6 @@
 /* credit: http://www.csslab.cl/2008/01/30/ventana-modal-solo-con-css/ */
 .session_security_overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -13,7 +13,7 @@
 }
 
 .session_security_modal {
-    position: absolute;
+    position: fixed;
     top: 25%;
     left: 25%;
     width: 50%;
