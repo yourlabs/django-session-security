@@ -1,15 +1,16 @@
 from django import template
 
-from session_security.settings import WARN_AFTER, EXPIRE_AFTER
+from session_security.settings import (
+    get_expire_after, get_warn_after)
 
 register = template.Library()
 
 
 @register.filter
 def expire_after(request):
-    return EXPIRE_AFTER
+    return get_expire_after(request)
 
 
 @register.filter
 def warn_after(request):
-    return WARN_AFTER
+    return get_warn_after(request)

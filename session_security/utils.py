@@ -13,5 +13,5 @@ def get_last_activity(session):
     Get the last activity datetime string from the session and return the
     python datetime object.
     """
-    return datetime.strptime(session['_session_security'],
-        '%Y-%m-%dT%H:%M:%S.%f')
+    return datetime.strptime(
+        session['_session_security'], '%Y-%m-%dT%H:%M:%S.%f')

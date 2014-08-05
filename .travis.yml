@@ -15,7 +15,7 @@ install:
   - pip install pep8 --use-mirrors
   - pip install https://github.com/dcramer/pyflakes/tarball/master
   - pip install -q -e . --use-mirrors
-  - pip install selenium==2.37.2 unittest_data_provider six
+  - pip install selenium==2.42.1 unittest_data_provider six
   - pip freeze
 before_script:
   - "pep8 --exclude=tests,migrations --ignore=E124,E128 session_security"

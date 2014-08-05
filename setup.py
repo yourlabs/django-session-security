@@ -1,5 +1,7 @@
+import os
+import sys
 from setuptools import setup, find_packages, Command
-import os, sys
+
 
 # Utility function to read the README file.
 # Used for the long_description. It's nice, because now 1) we have a top level
@@ -29,8 +31,8 @@ class RunTests(Command):
         os.environ["DJANGO_SETTINGS_MODULE"] = 'test_project.settings'
         settings_file = os.environ["DJANGO_SETTINGS_MODULE"]
         settings_mod = __import__(settings_file, {}, {}, [''])
-        execute_from_command_line(argv=[ __file__, "test",
-            "session_security"])
+        execute_from_command_line(
+            argv=[__file__, "test", "session_security"])
         os.chdir(this_dir)
 
 if 'sdist' in sys.argv:
@@ -51,13 +53,13 @@ setup(
     include_package_data=True,
     zip_safe=False,
     long_description=read('README.rst'),
-    license = 'MIT',
-    keywords = 'django session',
+    license='MIT',
+    keywords='django session',
     cmdclass={'test': RunTests},
     install_requires=[
         'django',
     ],
-    classifiers = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -71,4 +73,3 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
 )
-

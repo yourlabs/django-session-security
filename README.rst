@@ -37,7 +37,9 @@ ping.
 
 First, a warning should be shown after ``settings.SESSION_SECURITY_WARN_AFTER``
 seconds. The warning displays a text like "Your session is about to expire,
-move the mouse to extend it".
+move the mouse to extend it". Alternatively, you could set
+``settings.SESSION_SECURITY_WARN_BEFORE`` if you don't know the
+``settings.SESSION_SECURITY_EXPIRE_AFTER`` value before hand.
 
 Before displaying this warning, SessionSecurity will upload the time since the
 last client-side activity was recorded. The middleware will take it if it is
@@ -52,6 +54,12 @@ the PingView response.
 Same goes to expire after ``settings.SESSION_SECURITY_EXPIRE_AFTER`` seconds.
 Javascript will first make an ajax request to PingView to ensure that another
 more recent activity was not detected anywhere else - in any other browser tab.
+
+NOTE: To handle custom ``settings.SESSION_SECURITY_EXPIRE_AFTER`` values
+(when there's a need for user-defined value), simply set
+``settings.SESSION_SECURITY_CUSTOM_SESSION_KEY``. Middleware will take value
+from ``request.session[settings.SESSION_SECURITY_CUSTOM_SESSION_KEY]`` first
+before defaulting to ``settings.SESSION_SECURITY_EXPIRE_AFTER`` value.
 
 Requirements
 ------------

@@ -1,5 +1,5 @@
-from datetime import datetime
 import time
+from datetime import datetime
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
@@ -7,6 +7,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
 from .base import BaseLiveServerTestCase
+
 
 class ScriptTestCase(BaseLiveServerTestCase):
     def warning_element(self):
@@ -23,7 +24,7 @@ class ScriptTestCase(BaseLiveServerTestCase):
         now = datetime.now()
 
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
 
             while self.warning_element() is False:
                 time.sleep(0.1)
@@ -32,7 +33,7 @@ class ScriptTestCase(BaseLiveServerTestCase):
                     self.fail('Warning did not make it into DOM')
 
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
 
             while self.warning_element().is_displayed() is False:
                 time.sleep(0.1)
@@ -44,7 +45,7 @@ class ScriptTestCase(BaseLiveServerTestCase):
         now = datetime.now()
 
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
 
             while self.warning_element().is_displayed() is not False:
                 time.sleep(0.1)
@@ -56,7 +57,7 @@ class ScriptTestCase(BaseLiveServerTestCase):
         now = datetime.now()
 
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
 
             while self.warning_element() is not False:
                 time.sleep(0.1)
@@ -66,19 +67,18 @@ class ScriptTestCase(BaseLiveServerTestCase):
 
     def assertWarningShown(self):
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
             self.assertTrue(self.warning_element().is_displayed())
 
     def assertWarningHidden(self):
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
             self.assertFalse(self.warning_element().is_displayed())
 
     def assertWarningNotInPage(self):
         for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+            self.browser.switch_to.window(win)
             self.assertTrue(self.warning_element() is False)
-
 
     def test_single_window_inactivity(self):
         self.wait_for_pages_loaded()
