@@ -17,7 +17,7 @@ msgstr ""
 
 #: templates/session_security/all.html:32
 msgid "You have unsaved changes in a form of this page."
-msgstr "Vous avez des changements non sauvegardé dans un formulaire de cette page."
+msgstr "Vous avez des changements non sauvegardés dans un formulaire de cette page."
 
 #: templates/session_security/dialog.html:6
 msgid "Your session is about to expire"
