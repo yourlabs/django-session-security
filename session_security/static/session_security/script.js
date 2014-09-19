@@ -48,7 +48,12 @@ yourlabs.SessionSecurity.prototype = {
     // seconds.
     expire: function() {
         this.expired = true;
-        window.location.reload();
+        if (this.returnToUrl) {
+            window.location.href = this.returnToUrl;
+        }
+        else {
+            window.location.reload();
+        }
     },
     
     // Called when there has been no activity for more than warnAfter
