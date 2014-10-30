@@ -1,7 +1,12 @@
 import time
 
 from django.contrib.auth.models import User
-from django.test import LiveServerTestCase
+
+try:
+    from django.contrib.staticfiles.testing import StaticLiveServerTestCase as \
+        LiveServerTestCase
+except ImportError:
+    from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
