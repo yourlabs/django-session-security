@@ -8,9 +8,12 @@ from django.test.client import Client
 from session_security.utils import set_last_activity
 from session_security import settings
 
+from .base import get_or_create_test_admin
+
 
 class MiddlewareTestCase(unittest.TestCase):
     def setUp(self):
+        get_or_create_test_admin()
         self.client = Client()
 
     def test_auto_logout(self):
@@ -65,6 +68,7 @@ class DynamicSessionLevelTestCase(DjangoTestCase):
         return old_settings
 
     def setUp(self):
+        get_or_create_test_admin()
         self.client = Client()
         self.client.login(username='test', password='test')
         self.saved_settings = self.monkey_patch()

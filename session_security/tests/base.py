@@ -8,14 +8,20 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
 
+def get_or_create_test_admin():
+    u, c = User.objects.get_or_create(username='test')
+
+    if c:
+        u.is_staff = True
+        u.set_password('test')
+        u.save()
+
+    return u
+
+
 class BaseLiveServerTestCase(LiveServerTestCase):
     def setUp(self):
-        u, c = User.objects.get_or_create(username='test')
-        if c:
-            u.is_staff = True
-            u.set_password('test')
-            u.save()
-
+        get_or_create_test_admin()
         self.browser = WebDriver()
         self.do_admin_login('test', 'test')
 
