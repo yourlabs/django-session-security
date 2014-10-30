@@ -42,11 +42,11 @@ class BaseLiveServerTestCase(LiveServerTestCase):
         self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
 
     def new_window(self, name='other'):
-        self.browser.execute_script('window.open("/admin/", "' + name + '")')
-        self.browser.switch_to.window(self.browser.window_handles[1])
+        self.browser.execute_script('window.open("/admin/", "'+ name +'")')
+        self.browser.switch_to_window(self.browser.window_handles[1])
         while self.warning_element() is False:
             time.sleep(0.1)
-        self.browser.switch_to.window(self.browser.window_handles[0])
+        self.browser.switch_to_window(self.browser.window_handles[0])
 
     def press_space(self):
         a = ActionChains(self.browser)

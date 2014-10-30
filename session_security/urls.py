@@ -21,8 +21,7 @@ except ImportError:
 
 from .views import PingView
 
-urlpatterns = patterns(
-    '',
+urlpatterns = patterns('',
     url(
         'ping/$',
         PingView.as_view(),

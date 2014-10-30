@@ -4,4 +4,3 @@ django_session_security.egg-info
 dist
 docs/build
 docs/source/_static/
-.idea

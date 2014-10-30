@@ -11,9 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
-import os.path
+import sys, os, os.path
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -22,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../../../lib/python2.7/site-packages/'))
 from django.conf import settings
 settings.configure()
-settings.ROOT_URLCONF = 'session_security.urls'
+settings.ROOT_URLCONF='session_security.urls'
 settings.SESSION_EXPIRE_AT_BROWSER_CLOSE
 
 autoclass_content = "both"
@@ -192,21 +190,21 @@ htmlhelp_basename = 'django-session-securitydoc'
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-    #The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+# The paper size ('letterpaper' or 'a4paper').
+#'papersize': 'letterpaper',
 
-    #The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+# The font size ('10pt', '11pt' or '12pt').
+#'pointsize': '10pt',
 
-    #Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+# Additional stuff for the LaTeX preamble.
+#'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'django-session-security.tex', u'django-session-security Documentation',
-     u'James Pic', 'manual'),
+  ('index', 'django-session-security.tex', u'django-session-security Documentation',
+   u'James Pic', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -249,9 +247,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'django-session-security', u'django-session-security Documentation',
-     u'James Pic', 'django-session-security', 'One line description of project.',
-     'Miscellaneous'),
+  ('index', 'django-session-security', u'django-session-security Documentation',
+   u'James Pic', 'django-session-security', 'One line description of project.',
+   'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

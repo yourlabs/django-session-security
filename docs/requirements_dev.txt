@@ -1,9 +1,0 @@
-Django==1.6.5
-Markdown==2.4.1
-Pycco==0.3.0
-Pygments==1.6
-pystache==0.5.4
-selenium==2.42.1
-six==1.7.2
-smartypants==1.8.3
-unittest-data-provider==1.0.1

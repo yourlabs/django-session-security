@@ -1,3 +1,3 @@
 from .script import ScriptTestCase
 from .views import ViewsTestCase
-from .middleware import MiddlewareTestCase, DynamicSessionLevelTestCase
+from .middleware import MiddlewareTestCase
