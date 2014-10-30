@@ -10,6 +10,9 @@ env:
   - DJANGO=1.4
   - DJANGO=1.5
   - DJANGO=1.6
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 install:
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install pep8 --use-mirrors
@@ -19,8 +22,6 @@ install:
   - pip freeze
 before_script:
   - "pep8 --exclude=tests,migrations --ignore=E124,E128 session_security"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
 script:
   - python setup.py test
 notifications:
