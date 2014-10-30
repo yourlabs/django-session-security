@@ -24,7 +24,7 @@ install:
 before_script:
   - "pep8 --exclude=tests,migrations --ignore=E124,E128 session_security"
 script:
-  - python setup.py test
+  - ./test_project/manage.py test session_security
 notifications:
   irc: 
     channels: 
