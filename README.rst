@@ -56,7 +56,7 @@ more recent activity was not detected anywhere else - in any other browser tab.
 Requirements
 ------------
 
-- Python 2.7
+- Python 2.7 or 3
 - jQuery 1.7+
 - Django 1.4+
 - django.contrib.staticfiles or django-staticfiles (included in Pinax) or
