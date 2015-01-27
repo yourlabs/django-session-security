@@ -26,6 +26,9 @@ class SessionSecurityMiddleware(object):
     user if appropriate.
     """
 
+    def is_passive_request(self, request):
+        return request.path in PASSIVE_URLS
+
     def process_request(self, request):
         """ Update last activity time or logout. """
         if not request.user.is_authenticated():
@@ -37,7 +40,7 @@ class SessionSecurityMiddleware(object):
         delta = now - get_last_activity(request.session)
         if delta >= timedelta(seconds=EXPIRE_AFTER):
             logout(request)
-        elif request.path not in PASSIVE_URLS:
+        elif not self.is_passive_request(request):
             set_last_activity(request.session, now)
 
     def update_last_activity(self, request, now):
