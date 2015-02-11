@@ -15,6 +15,7 @@ Contents:
 
    quick
    full
+   faq
 
 Indices and tables
 ==================
