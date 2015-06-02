@@ -66,7 +66,12 @@ yourlabs.SessionSecurity.prototype = {
 
     // Called by click, scroll, mousemove, keyup.
     activity: function() {
-        this.lastActivity = new Date();
+        var now = new Date();
+        if (now - this.lastActivity < 1000)
+            // Throttle these checks to once per second
+            return;
+
+        this.lastActivity = now;
 
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
