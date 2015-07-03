@@ -30,7 +30,9 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS', 'CONFIRM_FORM_DISCARD']
+__all__ = [
+    'EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS', 'CONFIRM_FORM_DISCARD'
+]
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
