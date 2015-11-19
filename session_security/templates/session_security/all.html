@@ -26,11 +26,20 @@ It provides sensible defaults so you could start with just::
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
     {% localize off %}
         <script type="text/javascript">
+            var confirm_form_discard = {{ request|confirm_form_discard|yesno:"true,false" }};
+
+            if (confirm_form_discard){
+                var confirmFormDiscard = "{% trans 'You have unsaved changes in a form of this page.' %}";
+            }
+            else{
+                var confirmFormDiscard = false;
+            }
+
             var sessionSecurity = new yourlabs.SessionSecurity({
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},
-                confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
+                confirmFormDiscard: confirmFormDiscard
             });
         </script>
     {% endlocalize %}    
