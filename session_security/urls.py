@@ -21,10 +21,10 @@ except ImportError:
 
 from .views import PingView
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(
         'ping/$',
         PingView.as_view(),
         name='session_security_ping',
-    ),
-)
+    )
+]
