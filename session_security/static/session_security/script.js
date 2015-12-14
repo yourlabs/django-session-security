@@ -14,6 +14,7 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 //   leave a page with unsaved form data. Setting this will enable an
 //   onbeforeunload handler that doesn't block expire().
 // - events: a list of event types to watch for activity updates.
+// - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we just reload the page
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
