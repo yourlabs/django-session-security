@@ -13,9 +13,12 @@ from unittest_data_provider import data_provider
 
 from session_security.utils import set_last_activity
 
+from .base import get_or_create_test_admin
+
 
 class ViewsTestCase(unittest.TestCase):
     def setUp(self):
+        get_or_create_test_admin()
         self.client = Client()
 
     def test_anonymous(self):

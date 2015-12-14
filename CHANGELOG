@@ -1,10 +1,21 @@
+2.2.4 #43: Throttle lastActivity updates to once per second by @cuu508
+
+2.2.3 #31: Removed a .mo file
+
+2.2.2
+
+    - #21: Polish translation
+    - #23: French translation fix
+    - #26: Fix an edge bug discovered in multithreaded environments
+    - #30: Use reverse_lazy in settings.py
+    - Added to AUTHORS: @mschettler, @mattbo, @nirgal, @mpasternak
+
 2.2.1: #24: Center the modal on the viewport
 
 2.2.0: Pre-build .mo.
 
-2.1.7 #19: Use consistent formatting
-for the datetime. Fixes random failures
-in test suites. By Scott Sexton.
+2.1.7 #19: Use consistent formatting for the datetime. Fixes random failures in
+      test suites. By Scott Sexton.
 
 2.1.6 #18: Spanish translation
 

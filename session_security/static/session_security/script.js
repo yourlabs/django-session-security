@@ -39,7 +39,8 @@ yourlabs.SessionSecurity = function(options) {
     if (this.confirmFormDiscard) {
         window.onbeforeunload = $.proxy(this.onbeforeunload, this);
         $(document).on('change', ':input', $.proxy(this.formChange, this));
-        $(document).on('submit', 'form', $.proxy(this.formSubmit, this));
+        $(document).on('submit', 'form', $.proxy(this.formClean, this));
+        $(document).on('reset', 'form', $.proxy(this.formClean, this));
     }
 }
 
@@ -70,7 +71,12 @@ yourlabs.SessionSecurity.prototype = {
 
     // Called by click, scroll, mousemove, keyup.
     activity: function() {
-        this.lastActivity = new Date();
+        var now = new Date();
+        if (now - this.lastActivity < 1000)
+            // Throttle these checks to once per second
+            return;
+
+        this.lastActivity = now;
 
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
@@ -138,8 +144,8 @@ yourlabs.SessionSecurity.prototype = {
         $(e.target).closest('form').attr('data-dirty', true);
     },
 
-    // When a form is submited, unset data-dirty attribute.
-    formSubmit: function(e) {
+    // When a form is submitted or resetted, unset data-dirty attribute.
+    formClean: function(e) {
         $(e.target).removeAttr('data-dirty');
     }
 }

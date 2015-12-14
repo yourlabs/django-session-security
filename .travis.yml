@@ -10,23 +10,24 @@ env:
   - DJANGO=1.4
   - DJANGO=1.5
   - DJANGO=1.6
+  - DJANGO=1.7
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 install:
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install pep8 --use-mirrors
   - pip install https://github.com/dcramer/pyflakes/tarball/master
   - pip install -q -e . --use-mirrors
-  - pip install selenium==2.37.2 unittest_data_provider six
+  - pip install selenium==2.42.1 unittest_data_provider six
   - pip freeze
 before_script:
   - "pep8 --exclude=tests,migrations --ignore=E124,E128 session_security"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
 script:
-  - python setup.py test
+  - ./test_project/manage.py test session_security
 notifications:
   irc: 
     channels: 
-      - "irc.freenode.org#neoskills"
       - "irc.freenode.org#yourlabs"
     template:
       - "%{repository} (%{commit} %{author}) : %{message} %{build_url} %{compare_url}"

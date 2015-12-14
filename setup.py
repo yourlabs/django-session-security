@@ -42,7 +42,7 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-session-security',
-    version='2.2.1',
+    version='2.2.4',
     description='Let the user secure his session for usage in public computers',
     author='James Pic',
     author_email='jamespic@gmail.com',

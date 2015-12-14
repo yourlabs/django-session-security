@@ -1,0 +1,20 @@
+How to trigger activity programaticaly in JS ?
+----------------------------------------------
+
+Call `sessionSecurity.activity()
+<http://django-session-security.readthedocs.org/en/stable-2.x.x/_static/script.html#section-11>`
+every time you want to programaticaly trigger an activity.
+
+
+How to disable the "Are you sure you want to leave this page?" warning ?
+----------------------------------------------
+
+Include the JavaScript variable ``sessionSecurity.confirmFormDiscard = undefined;`` somewhere in your project *after* the plugin's JS. For example::
+
+    <!-- base.html -->
+    ...
+    {% include 'session_security/all.html' %}
+    <script>
+        sessionSecurity.confirmFormDiscard = undefined;
+    </script>
+    ...
