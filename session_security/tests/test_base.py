@@ -9,7 +9,7 @@ except ImportError:
     from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
 from session_security.settings import WARN_AFTER, EXPIRE_AFTER
