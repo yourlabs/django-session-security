@@ -19,7 +19,7 @@ install:
   - pip install tox --use-mirrors
   - pip freeze
 script:
-  - tox
+  - CI=1 tox
 notifications:
   irc:
     channels:

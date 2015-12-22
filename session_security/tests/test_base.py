@@ -1,3 +1,4 @@
+import os
 import time
 
 from django.contrib.auth.models import User
@@ -9,7 +10,11 @@ except ImportError:
     from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.chrome.webdriver import WebDriver
+
+if os.environ.get('CI', False):
+    from selenium.webdriver.phantomjs.webdriver import WebDriver
+else:
+    from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
 from session_security.settings import WARN_AFTER, EXPIRE_AFTER
