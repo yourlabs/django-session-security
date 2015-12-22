@@ -68,5 +68,5 @@ class BaseLiveServerTestCase(SettingsMixin, LiveServerTestCase):
         for win in self.browser.window_handles:
             self.browser.switch_to_window(win)
 
-            while self.warning_element() is False:
+            while self.browser.execute_script('window.sessionSecurity === undefined'):
                 time.sleep(0.1)
