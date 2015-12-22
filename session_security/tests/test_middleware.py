@@ -5,11 +5,12 @@ from django.test.client import Client
 from session_security.utils import set_last_activity
 from datetime import datetime, timedelta
 
-from .test_base import get_or_create_test_admin
+from .test_base import get_or_create_test_admin, SettingsMixin
 
 
-class MiddlewareTestCase(unittest.TestCase):
+class MiddlewareTestCase(SettingsMixin, unittest.TestCase):
     def setUp(self):
+        super(MiddlewareTestCase, self).setUp()
         get_or_create_test_admin()
         self.client = Client()
 
@@ -17,14 +18,14 @@ class MiddlewareTestCase(unittest.TestCase):
         self.client.login(username='test', password='test')
         response = self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
-        time.sleep(12)
+        time.sleep(self.max_expire_after)
         response = self.client.get('/admin/')
         self.assertFalse('_auth_user_id' in self.client.session)
 
     def test_last_activity_in_future(self):
         self.client.login(username='test', password='test')
         now = datetime.now()
-        future = now + timedelta(0, 30)
+        future = now + timedelta(0, self.max_expire_after * 2)
         set_last_activity(self.client.session, future)
         response = self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
@@ -32,19 +33,19 @@ class MiddlewareTestCase(unittest.TestCase):
     def test_non_javascript_browse_no_logout(self):
         self.client.login(username='test', password='test')
         response = self.client.get('/admin/')
-        time.sleep(8)
+        time.sleep(self.max_warn_after)
         response = self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
-        time.sleep(4)
+        time.sleep(self.min_warn_after)
         response = self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
 
     def test_javascript_activity_no_logout(self):
         self.client.login(username='test', password='test')
         response = self.client.get('/admin/')
-        time.sleep(8)
+        time.sleep(self.max_warn_after)
         self.client.get('/session_security/ping/?idleFor=1')
         self.assertTrue('_auth_user_id' in self.client.session)
-        time.sleep(4)
+        time.sleep(self.min_warn_after)
         self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)

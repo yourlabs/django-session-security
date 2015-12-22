@@ -12,6 +12,7 @@ from django.test.client import Client
 from unittest_data_provider import data_provider
 
 from session_security.utils import set_last_activity
+from session_security import settings
 
 from .test_base import get_or_create_test_admin
 
@@ -36,6 +37,9 @@ class ViewsTestCase(unittest.TestCase):
 
     @data_provider(ping_provider)
     def test_ping(self, server, client, expected, authenticated=True):
+        old_warn, old_expire = settings.WARN_AFTER, settings.EXPIRE_AFTER
+        settings.WARN_AFTER, settings.EXPIRE_AFTER = 5, 10
+
         self.client.login(username='test', password='test')
         self.client.get('/admin/')
 
@@ -48,3 +52,5 @@ class ViewsTestCase(unittest.TestCase):
 
         self.assertEqual(response.content, six.b(expected))
         self.assertEqual(authenticated, '_auth_user_id' in self.client.session)
+
+        settings.WARN_AFTER, settings.EXPIRE_AFTER = old_warn, old_expire

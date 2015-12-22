@@ -12,6 +12,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
+from session_security.settings import WARN_AFTER, EXPIRE_AFTER
+
 
 def get_or_create_test_admin():
     u, c = User.objects.get_or_create(username='test')
@@ -24,8 +26,17 @@ def get_or_create_test_admin():
     return u
 
 
-class BaseLiveServerTestCase(LiveServerTestCase):
+class SettingsMixin(object):
     def setUp(self):
+        # Give some time for selenium lag
+        self.min_warn_after = WARN_AFTER
+        self.max_warn_after = EXPIRE_AFTER * 0.9
+        self.max_expire_after = EXPIRE_AFTER * 1.5
+
+
+class BaseLiveServerTestCase(SettingsMixin, LiveServerTestCase):
+    def setUp(self):
+        super(BaseLiveServerTestCase, self).setUp()
         get_or_create_test_admin()
         self.browser = WebDriver()
         self.do_admin_login('test', 'test')
