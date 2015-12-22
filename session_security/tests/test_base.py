@@ -55,5 +55,7 @@ class BaseLiveServerTestCase(LiveServerTestCase):
 
     def wait_for_pages_loaded(self):
         for win in self.browser.window_handles:
+            self.browser.switch_to_window(win)
+
             while self.warning_element() is False:
                 time.sleep(0.1)
