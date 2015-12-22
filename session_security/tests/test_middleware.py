@@ -5,7 +5,7 @@ from django.test.client import Client
 from session_security.utils import set_last_activity
 from datetime import datetime, timedelta
 
-from .base import get_or_create_test_admin
+from .test_base import get_or_create_test_admin
 
 
 class MiddlewareTestCase(unittest.TestCase):

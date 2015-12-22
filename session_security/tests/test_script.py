@@ -6,7 +6,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
-from .base import BaseLiveServerTestCase
+from .test_base import BaseLiveServerTestCase
 
 class ScriptTestCase(BaseLiveServerTestCase):
     def warning_element(self):
