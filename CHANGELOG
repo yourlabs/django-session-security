@@ -1,3 +1,7 @@
+2.3.0 Deprecate support for Django < 1.6
+
+2.2.5 #56: Dj19 support by @eriktelepovsky
+
 2.2.4 #43: Throttle lastActivity updates to once per second by @cuu508
 
 2.2.3 #31: Removed a .mo file
