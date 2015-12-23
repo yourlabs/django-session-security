@@ -8,18 +8,18 @@ import unittest
 
 from django.test.utils import override_settings
 from django.test.client import Client
+from django import test
 
 from unittest_data_provider import data_provider
 
 from session_security.utils import set_last_activity
 from session_security import settings
 
-from .test_base import get_or_create_test_admin
 
+class ViewsTestCase(test.TestCase):
+    fixtures = ['session_security_test_user']
 
-class ViewsTestCase(unittest.TestCase):
     def setUp(self):
-        get_or_create_test_admin()
         self.client = Client()
 
     def test_anonymous(self):
