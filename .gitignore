@@ -1,6 +1,7 @@
 *.pyc
 django_session_security.egg-info
 .ropeproject
+.idea
 dist
 docs/build
 docs/source/_static/

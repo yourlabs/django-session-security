@@ -1,3 +1,4 @@
+import os
 import time
 
 from django.contrib.auth.models import User
@@ -9,8 +10,14 @@ except ImportError:
     from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.firefox.webdriver import WebDriver
+
+if os.environ.get('CI', False):
+    from selenium.webdriver.phantomjs.webdriver import WebDriver
+else:
+    from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
+
+from session_security.settings import WARN_AFTER, EXPIRE_AFTER
 
 
 def get_or_create_test_admin():
@@ -24,8 +31,17 @@ def get_or_create_test_admin():
     return u
 
 
-class BaseLiveServerTestCase(LiveServerTestCase):
+class SettingsMixin(object):
     def setUp(self):
+        # Give some time for selenium lag
+        self.min_warn_after = WARN_AFTER
+        self.max_warn_after = EXPIRE_AFTER * 0.9
+        self.max_expire_after = EXPIRE_AFTER * 1.5
+
+
+class BaseLiveServerTestCase(SettingsMixin, LiveServerTestCase):
+    def setUp(self):
+        super(BaseLiveServerTestCase, self).setUp()
         get_or_create_test_admin()
         self.browser = WebDriver()
         self.do_admin_login('test', 'test')
@@ -55,5 +71,7 @@ class BaseLiveServerTestCase(LiveServerTestCase):
 
     def wait_for_pages_loaded(self):
         for win in self.browser.window_handles:
-            while self.warning_element() is False:
+            self.browser.switch_to_window(win)
+
+            while self.browser.execute_script('window.sessionSecurity === undefined'):
                 time.sleep(0.1)
