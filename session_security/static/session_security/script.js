@@ -50,7 +50,7 @@ yourlabs.SessionSecurity.prototype = {
     // seconds.
     expire: function() {
         this.expired = true;
-        if (this.returnToUrl) {
+        if (this.returnToUrl !== undefined) {
             window.location.href = this.returnToUrl;
         }
         else {
