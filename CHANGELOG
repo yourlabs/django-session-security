@@ -1,3 +1,9 @@
+2.3.1
+
+    - #57: added redirectTo parameter to the script by Andrei Coman
+    - test stabilization with django-sbo-selenium
+    - Django 1.10 support
+
 2.3.0 Deprecate support for Django < 1.6
 
 2.2.5 #56: Dj19 support by @eriktelepovsky
