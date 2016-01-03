@@ -2,16 +2,18 @@ import time
 import unittest
 
 from django.test.client import Client
+from django import test
 from session_security.utils import set_last_activity
 from datetime import datetime, timedelta
 
-from .test_base import get_or_create_test_admin, SettingsMixin
+from .test_base import SettingsMixin
 
 
-class MiddlewareTestCase(SettingsMixin, unittest.TestCase):
+class MiddlewareTestCase(SettingsMixin, test.TestCase):
+    fixtures = ['session_security_test_user']
+
     def setUp(self):
         super(MiddlewareTestCase, self).setUp()
-        get_or_create_test_admin()
         self.client = Client()
 
     def test_auto_logout(self):

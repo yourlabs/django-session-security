@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'session_security',
+    'sbo_selenium',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

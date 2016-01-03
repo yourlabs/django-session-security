@@ -1,126 +1,57 @@
-from datetime import datetime
+import datetime
 import time
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
 
-from .test_base import BaseLiveServerTestCase
+from .test_base import BaseLiveServerTestCase, WAIT_TIME
+
 
 class ScriptTestCase(BaseLiveServerTestCase):
-    def warning_element(self):
-        try:
-            return self.browser.find_elements_by_css_selector(
-                '#session_security_warning')[0]
-        except IndexError:
-            return False
+    def test_warning_shows_and_session_expires(self):
+        start = datetime.datetime.now()
 
-    def deadline_passed(self, now, deadline):
-        return (datetime.now() - now).seconds > deadline
+        for win in self.sel.window_handles:
+            self.sel.switch_to_window(win)
+            self.wait_until_visible('#session_security_warning')
+            self.assert_visible('#session_security_warning')
 
-    def assertWarningShows(self, max_seconds):
-        now = datetime.now()
+        end = datetime.datetime.now()
+        delta = end - start
 
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
+        self.assertGreaterEqual(delta.seconds, self.min_warn_after)
+        self.assertLessEqual(delta.seconds, self.max_warn_after)
 
-            while self.warning_element() is False:
-                time.sleep(0.1)
+        for win in self.sel.window_handles:
+            self.sel.switch_to_window(win)
+            self.wait_until_visible('#id_password')
 
-                if self.deadline_passed(now, max_seconds):
-                    self.fail('Warning did not make it into DOM')
+        delta = datetime.datetime.now() - start
+        self.assertGreaterEqual(delta.seconds, self.min_expire_after)
+        self.assertLessEqual(delta.seconds, self.max_expire_after)
 
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-
-            while self.warning_element().is_displayed() is False:
-                time.sleep(0.1)
-
-                if self.deadline_passed(now, max_seconds):
-                    self.fail('Warning did not make it into DOM')
-
-    def assertWarningHides(self, max_seconds):
-        now = datetime.now()
-
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-
-            while self.warning_element().is_displayed() is not False:
-                time.sleep(0.1)
-
-                if self.deadline_passed(now, max_seconds):
-                    self.fail('Warning did not hide')
-
-    def assertExpires(self, max_seconds):
-        now = datetime.now()
-
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-
-            while self.warning_element() is not False:
-                time.sleep(0.1)
-
-                if self.deadline_passed(now, max_seconds):
-                    self.fail('Warning did not make it out of DOM')
-
-    def assertWarningShown(self):
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-            self.assertTrue(self.warning_element().is_displayed())
-
-    def assertWarningHidden(self):
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-            self.assertFalse(self.warning_element().is_displayed())
-
-    def assertWarningNotInPage(self):
-        for win in self.browser.window_handles:
-            self.browser.switch_to_window(win)
-            self.assertTrue(self.warning_element() is False)
-
-
-    def test_single_window_inactivity(self):
-        self.wait_for_pages_loaded()
-        self.assertWarningHidden()
-        self.assertWarningShows(self.max_warn_after)
-        self.assertExpires(self.max_expire_after)
-
-    def test_single_dont_show_warning(self):
-        self.wait_for_pages_loaded()
-        self.assertWarningHidden()
-        time.sleep(self.min_warn_after * 0.5)
+    def test_activity_hides_warning(self):
+        self.wait_until_visible('#session_security_warning')
         self.press_space()
-        self.assertWarningHidden()
-        time.sleep(self.min_warn_after * 0.5)
-        self.assertWarningHidden()
 
-    def test_single_hide_warning(self):
-        self.assertWarningShows(self.max_warn_after)
+        for win in self.sel.window_handles:
+            self.sel.switch_to_window(win)
+            self.wait_until_hidden('#session_security_warning')
+            self.assert_not_visible('#session_security_warning')
+
+    def test_activity_prevents_warning(self):
+        time.sleep(self.min_warn_after * .7)
         self.press_space()
-        self.assertWarningHides(self.min_warn_after * 0.8)
 
-    def test_double_window_inactivity(self):
-        self.new_window()
-        #self.wait_for_pages_loaded()
-        self.assertWarningHidden()
-        self.assertWarningShows(self.max_warn_after)
-        self.assertExpires(self.max_expire_after)
-
-    def test_double_dont_show_warning(self):
-        self.new_window()
-        self.wait_for_pages_loaded()
-        self.assertWarningHidden()
-        time.sleep(self.min_warn_after * 0.5)
-        self.press_space()
-        self.assertWarningHidden()
-        time.sleep(self.min_warn_after * 0.5)
-        self.assertWarningHidden()
-
-    def test_double_hide_warning(self):
-        self.new_window()
-        self.assertWarningShows(self.max_warn_after)
-        # Not fixing a race condition here ^^
-        time.sleep(1)
-        self.press_space()
-        self.assertWarningHides(self.min_warn_after * 0.9)
+        start = datetime.datetime.now()
+        for win in self.sel.window_handles:
+            self.sel.switch_to_window(win)
+            self.wait_until_visible('#session_security_warning')
+            self.assert_visible('#session_security_warning')
+        delta = datetime.datetime.now() - start
+        self.assertGreaterEqual(delta.seconds, self.min_warn_after)
