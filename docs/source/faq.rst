@@ -7,7 +7,7 @@ every time you want to programaticaly trigger an activity.
 
 
 How to disable the "Are you sure you want to leave this page?" warning ?
-----------------------------------------------
+------------------------------------------------------------------------
 
 Include the JavaScript variable ``sessionSecurity.confirmFormDiscard = undefined;`` somewhere in your project *after* the plugin's JS. For example::
 
