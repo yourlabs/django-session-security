@@ -34,3 +34,6 @@ def get_last_activity(session):
         #################################################################
 
         return datetime.now()
+    except TypeError:
+        return datetime.now()
+
