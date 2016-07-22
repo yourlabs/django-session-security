@@ -51,3 +51,11 @@ class MiddlewareTestCase(SettingsMixin, test.TestCase):
         time.sleep(self.min_warn_after)
         self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
+
+    # def test_message_after_logout(self):
+    #     self.client.login(username='test', password='test')
+    #     response = self.client.get('/admin/')
+    #     self.assertTrue('_auth_user_id' in self.client.session)
+    #     time.sleep(self.max_expire_after)
+    #     response = self.client.get('/admin/')
+    #     self.assertFalse('_auth_user_id' in self.client.session)
