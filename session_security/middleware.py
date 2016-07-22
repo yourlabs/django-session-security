@@ -11,11 +11,12 @@ Make sure that it is placed **after** authentication middlewares.
 
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS
+from .settings import EXPIRE_AFTER, PASSIVE_URLS, EXPIRATION_MESSAGE
 
 
 class SessionSecurityMiddleware(object):
@@ -42,6 +43,9 @@ class SessionSecurityMiddleware(object):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
+            if EXPIRATION_MESSAGE:
+                messages.add_message(
+                    request, messages.WARNING, EXPIRATION_MESSAGE)
             logout(request)
         elif not self.is_passive_request(request):
             set_last_activity(request.session, now)
