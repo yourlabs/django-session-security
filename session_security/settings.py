@@ -38,6 +38,9 @@ WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 EXPIRATION_MESSAGE = getattr(
     settings, 'SESSION_SECURITY_EXPIRATION_MESSAGE', None)
 
+PREVENT_LOGOUT_FOR_SUPERUSERS = getattr(
+    settings, 'SESSION_SECURITY_PREVENT_LOGOUT_FOR_SUPERUSERS', False)
+
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 PASSIVE_URLS += [
     urlresolvers.reverse('session_security_ping'),

@@ -16,7 +16,9 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS, EXPIRATION_MESSAGE
+from .settings import (
+    EXPIRE_AFTER, PASSIVE_URLS, EXPIRATION_MESSAGE,
+    PREVENT_LOGOUT_FOR_SUPERUSERS)
 
 
 class SessionSecurityMiddleware(object):
@@ -24,6 +26,10 @@ class SessionSecurityMiddleware(object):
     In charge of maintaining the real 'last activity' time, and log out the
     user if appropriate.
     """
+
+    def is_super_or_staff_user(self, request):
+        return (PREVENT_LOGOUT_FOR_SUPERUSERS and
+                (request.user.is_staff or request.user.is_superuser))
 
     def is_passive_request(self, request):
         return request.path in PASSIVE_URLS
@@ -42,7 +48,8 @@ class SessionSecurityMiddleware(object):
 
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
-        if delta >= timedelta(seconds=expire_seconds):
+        if (not self.is_super_or_staff_user(request) and
+                delta >= timedelta(seconds=expire_seconds)):
             if EXPIRATION_MESSAGE:
                 messages.add_message(
                     request, messages.WARNING, EXPIRATION_MESSAGE)
