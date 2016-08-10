@@ -17,7 +17,12 @@ PASSIVE_URLS
     Overridable in ``settings.SESSION_SECURITY_PASSIVE_URLS``.
 
 EXPIRATION_MESSAGE
-    ...
+    Let's you set a default logout message displayed after the user is logged
+    out. Uses Django's message service. Default is None.
+
+PREVENT_LOGOUT_FOR_SUPERUSERS
+    If you want to keep staff/superusers always logged in, set this value
+    to True. Default is False.
 
 Note that this module will raise a warning if
 ``settings.SESSION_EXPIRE_AT_BROWSER_CLOSE`` is not True, because it makes no
