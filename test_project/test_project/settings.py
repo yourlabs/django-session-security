@@ -150,8 +150,10 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
-SESSION_SECURITY_EXPIRE_AFTER=10
-SESSION_SECURITY_WARN_AFTER=5
+SESSION_SECURITY_EXPIRE_AFTER = 10
+SESSION_SECURITY_WARN_AFTER = 5
+SESSION_SECURITY_EXPIRATION_MESSAGE = ('Looked out due to inactivity.')
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -167,9 +169,9 @@ LOGGING = {
         }
     },
     'handlers': {
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
         },
     },
     'loggers': {

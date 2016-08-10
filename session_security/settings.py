@@ -16,6 +16,14 @@ PASSIVE_URLS
     it should not be used to update the user's last activity datetime.
     Overridable in ``settings.SESSION_SECURITY_PASSIVE_URLS``.
 
+EXPIRATION_MESSAGE
+    Let's you set a default logout message displayed after the user is logged
+    out. Uses Django's message service. Default is None.
+
+PREVENT_LOGOUT_FOR_SUPERUSERS
+    If you want to keep staff/superusers always logged in, set this value
+    to True. Default is False.
+
 Note that this module will raise a warning if
 ``settings.SESSION_EXPIRE_AT_BROWSER_CLOSE`` is not True, because it makes no
 sense to use this app with ``SESSION_EXPIRE_AT_BROWSER_CLOSE`` to False.
@@ -26,11 +34,17 @@ import warnings
 from django.core import urlresolvers
 from django.conf import settings
 
-__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS']
+__all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS', 'EXPIRATION_MESSAGE']
 
 EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
 WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
+
+EXPIRATION_MESSAGE = getattr(
+    settings, 'SESSION_SECURITY_EXPIRATION_MESSAGE', None)
+
+PREVENT_LOGOUT_FOR_SUPERUSERS = getattr(
+    settings, 'SESSION_SECURITY_PREVENT_LOGOUT_FOR_SUPERUSERS', False)
 
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 PASSIVE_URLS += [
