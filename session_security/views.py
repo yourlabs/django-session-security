@@ -21,8 +21,10 @@ class PingView(generic.View):
     def get(self, request, *args, **kwargs):
         if '_session_security' not in request.session:
             # It probably has expired already
-            return http.HttpResponse('logout')
+            return http.HttpResponse('"logout"',
+                                     content_type='application/json')
 
         last_activity = get_last_activity(request.session)
         inactive_for = (datetime.now() - last_activity).seconds
-        return http.HttpResponse(inactive_for)
+        return http.HttpResponse(inactive_for,
+                                 content_type='application/json')
