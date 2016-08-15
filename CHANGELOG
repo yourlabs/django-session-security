@@ -1,3 +1,5 @@
+2.3.3 #69: Encode response to JSON by Tatsh
+
 2.3.2
 
     - #58: Allow for custom expiration based on request (#65) by @mjschultz
