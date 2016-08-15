@@ -120,7 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ('django.contrib.auth.context_processors.auth',
  'django.core.context_processors.tz',
  'django.contrib.messages.context_processors.messages')
 
-ROOT_URLCONF = 'test_project.urls'
+ROOT_URLCONF = 'session_security.tests.project.urls'
 
 LOGIN_URL='/admin/'
 LOGOUT_URL='/admin/logout/'
@@ -133,6 +133,17 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            '..',
+            '..',
+            'session_security',
+            'tests',
+            'project',
+            'templates'
+        )
+    ),
 )
 
 INSTALLED_APPS = (
