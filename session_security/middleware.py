@@ -45,7 +45,7 @@ class SessionSecurityMiddleware(object):
         if delta >= timedelta(seconds=expire_seconds):
             logout(request)
         elif not self.is_passive_request(request):
-            self.update_last_activity(request.session, now)
+            self.update_last_activity(request, now)
 
     def update_last_activity(self, request, now):
         """
