@@ -37,14 +37,15 @@ class SessionSecurityMiddleware(object):
             return
 
         now = datetime.now()
-        self.update_last_activity(request, now)
+        if '_session_security' not in request.session:
+            set_last_activity(request.session, now)
 
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             logout(request)
         elif not self.is_passive_request(request):
-            set_last_activity(request.session, now)
+            self.update_last_activity(request, now)
 
     def update_last_activity(self, request, now):
         """
@@ -52,9 +53,6 @@ class SessionSecurityMiddleware(object):
         recent activity than ``request.session['_session_security']`` and
         update it in this case.
         """
-        if '_session_security' not in request.session:
-            set_last_activity(request.session, now)
-
         last_activity = get_last_activity(request.session)
         server_idle_for = (now - last_activity).seconds
 
@@ -74,5 +72,5 @@ class SessionSecurityMiddleware(object):
                 # Client has more recent activity than we have in the session
                 last_activity = now - timedelta(seconds=client_idle_for)
 
-                # Update the session
-                set_last_activity(request.session, last_activity)
+        # Update the session
+        set_last_activity(request.session, last_activity)
