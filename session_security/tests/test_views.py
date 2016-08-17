@@ -28,12 +28,13 @@ class ViewsTestCase(test.TestCase):
         response = self.client.get('/session_security/ping/?idleFor=1')
         self.assertEqual(response.content, six.b('"logout"'))
 
-    ping_provider = lambda x=None: (
-        (1, 4, '1'),
-        (3, 2, '2'),
-        (5, 5, '5'),
-        (12, 14, '"logout"', False),
-    )
+    def ping_provider(x=None):
+        return (
+            (1, 4, '1'),
+            (3, 2, '2'),
+            (5, 5, '5'),
+            (12, 14, '"logout"', False),
+        )
 
     @data_provider(ping_provider)
     def test_ping(self, server, client, expected, authenticated=True):
