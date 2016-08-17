@@ -163,6 +163,7 @@ INSTALLED_APPS = (
 
 SESSION_SECURITY_EXPIRE_AFTER=10
 SESSION_SECURITY_WARN_AFTER=5
+SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
