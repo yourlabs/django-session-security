@@ -37,12 +37,17 @@ class SessionSecurityMiddleware(object):
             return
 
         now = datetime.now()
-        self.update_last_activity(request, now)
+        if '_session_security' not in request.session:
+            set_last_activity(request.session, now)
+            return
 
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             logout(request)
+        elif (request.path == reverse('session_security_ping') and
+                'idleFor' in request.GET):
+            self.update_last_activity(request, now)
         elif not self.is_passive_request(request):
             set_last_activity(request.session, now)
 
@@ -52,27 +57,22 @@ class SessionSecurityMiddleware(object):
         recent activity than ``request.session['_session_security']`` and
         update it in this case.
         """
-        if '_session_security' not in request.session:
-            set_last_activity(request.session, now)
-
         last_activity = get_last_activity(request.session)
         server_idle_for = (now - last_activity).seconds
 
-        if (request.path == reverse('session_security_ping') and
-                'idleFor' in request.GET):
-            # Gracefully ignore non-integer values
-            try:
-                client_idle_for = int(request.GET['idleFor'])
-            except ValueError:
-                return
+        # Gracefully ignore non-integer values
+        try:
+            client_idle_for = int(request.GET['idleFor'])
+        except ValueError:
+            return
 
-            # Disallow negative values, causes problems with delta calculation
-            if client_idle_for < 0:
-                client_idle_for = 0
+        # Disallow negative values, causes problems with delta calculation
+        if client_idle_for < 0:
+            client_idle_for = 0
 
-            if client_idle_for < server_idle_for:
-                # Client has more recent activity than we have in the session
-                last_activity = now - timedelta(seconds=client_idle_for)
+        if client_idle_for < server_idle_for:
+            # Client has more recent activity than we have in the session
+            last_activity = now - timedelta(seconds=client_idle_for)
 
-                # Update the session
-                set_last_activity(request.session, last_activity)
+        # Update the session
+        set_last_activity(request.session, last_activity)

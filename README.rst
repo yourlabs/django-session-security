@@ -80,6 +80,7 @@ package updates.
 - `Mailing list graciously hosted
   <http://groups.google.com/group/yourlabs>`_ by `Google
   <http://groups.google.com>`_
+- For **Security** issues, please contact yourlabs-security@googlegroups.com
 - `Continuous integration graciously hosted
   <http://travis-ci.org/yourlabs/django-session-security>`_ by `Travis-ci
   <http://travis-ci.org>`_
