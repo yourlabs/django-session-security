@@ -1,3 +1,16 @@
+2.4.0
+
+    - #75 Fix vulnerability when SESSION_EXPIRE_AT_BROWSER_CLOSE is off
+    - #77 Crash if SESSION_EXPIRE_AT_BROWSER_CLOSE is off
+    - #78 Update test matrix to have Django 1.10 + master instead of just
+      master
+    - #74 Created security mailing list
+
+    Thanks @ClaytonDelay for contacting about the issue.
+    Note that if you don't have SESSION_EXPIRE_AT_BROWSER_CLOSE=True in your
+    settings, then the project won't start unless you set
+    SESSION_SECURITY_INSECURE=True, which you shouldn't.
+
 2.3.3 #69: Encode response to JSON by Tatsh
 
 2.3.2
