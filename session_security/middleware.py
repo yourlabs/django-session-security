@@ -13,12 +13,13 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+from django.utils.deprecation import MiddlewareMixin
 
 from .utils import get_last_activity, set_last_activity
 from .settings import EXPIRE_AFTER, PASSIVE_URLS
 
 
-class SessionSecurityMiddleware(object):
+class SessionSecurityMiddleware(MiddlewareMixin):
     """
     In charge of maintaining the real 'last activity' time, and log out the
     user if appropriate.
