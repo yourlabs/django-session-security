@@ -24,7 +24,7 @@ yourlabs.SessionSecurity = function(options) {
     this.lastActivity = new Date();
 
     // Events that would trigger an activity
-    this.events = ['mousemove', 'scroll', 'keyup', 'click'];
+    this.events = ['mousemove', 'scroll', 'keyup', 'click', 'touchstart', 'touchend', 'touchmove'];
    
     // Merge the options dict here.
     $.extend(this, options);
@@ -70,7 +70,7 @@ yourlabs.SessionSecurity.prototype = {
         this.$warning.hide();
     },
 
-    // Called by click, scroll, mousemove, keyup.
+    // Called by click, scroll, mousemove, keyup, touchstart, touchend, touchmove.
     activity: function() {
         var now = new Date();
         if (now - this.lastActivity < 1000)
