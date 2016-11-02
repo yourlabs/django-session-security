@@ -62,12 +62,14 @@ yourlabs.SessionSecurity.prototype = {
     // seconds.
     showWarning: function() {
         this.$warning.fadeIn('slow');
+        this.$warning.attr('aria-hidden', 'false');
     },
     
     // Called to hide the warning, for example if there has been activity on
     // the server side - in another browser tab.
     hideWarning: function() {
         this.$warning.hide();
+        this.$warning.attr('aria-hidden', 'true');
     },
 
     // Called by click, scroll, mousemove, keyup.
