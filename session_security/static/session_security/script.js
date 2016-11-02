@@ -63,6 +63,7 @@ yourlabs.SessionSecurity.prototype = {
     showWarning: function() {
         this.$warning.fadeIn('slow');
         this.$warning.attr('aria-hidden', 'false');
+        this.$warning.find('h3').focus()
     },
     
     // Called to hide the warning, for example if there has been activity on
