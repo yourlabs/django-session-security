@@ -12,7 +12,7 @@ Make sure that it is placed **after** authentication middlewares.
 from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve, Resolver404
 
 try:
     from django.utils.deprecation import MiddlewareMixin
@@ -21,7 +21,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS
+from .settings import EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -31,7 +31,19 @@ class SessionSecurityMiddleware(MiddlewareMixin):
     """
 
     def is_passive_request(self, request):
-        return request.path in PASSIVE_URLS
+        """ Should we skip activity update on this URL/View. """
+        if request.path in PASSIVE_URLS:
+            return True
+
+        try:
+            match = resolve(request.path)
+            # TODO: check namespaces too
+            if match.url_name in PASSIVE_URL_NAMES:
+                return True
+        except Resolver404:
+            pass
+
+        return False
 
     def get_expire_seconds(self, request):
         """Return time (in seconds) before the user should be logged out."""

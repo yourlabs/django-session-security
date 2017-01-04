@@ -32,6 +32,8 @@ WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 
+PASSIVE_URL_NAMES = getattr(settings, 'SESSION_SECURITY_PASSIVE_URL_NAMES', [])
+
 expire_at_browser_close = getattr(
     settings,
     'SESSION_EXPIRE_AT_BROWSER_CLOSE',
