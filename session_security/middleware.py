@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+from django.utils.deprecation import MiddlewareMixin
 
 try:
     from django.utils.deprecation import MiddlewareMixin
