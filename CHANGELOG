@@ -1,3 +1,10 @@
+2.4.1
+
+    - #87: Add dutch translation by @rdekker1
+    - #81: Django 1.10 support by @eriktelepovsky
+    - #79: Removed compiled binary from source by @nirgal to comply with
+           Debian's source code repository policy
+
 2.4.0
 
     - #75 Fix vulnerability when SESSION_EXPIRE_AT_BROWSER_CLOSE is off
