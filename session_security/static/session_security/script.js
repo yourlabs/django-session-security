@@ -24,24 +24,27 @@ yourlabs.SessionSecurity = function(options) {
     this.lastActivity = new Date();
 
     // Events that would trigger an activity
-    this.events = ['mousemove', 'scroll', 'keyup', 'click'];
-   
+    this.events = ['mousemove', 'scroll', 'keyup', 'click', 'touchstart', 'touchend', 'touchmove'];
+
     // Merge the options dict here.
     $.extend(this, options);
 
     // Bind activity events to update this.lastActivity.
+    var $document = $(document);
     for(var i=0; i<this.events.length; i++) {
-        $(document)[this.events[i]]($.proxy(this.activity, this))
+        if ($document[this.events[i]]) {
+            $document[this.events[i]]($.proxy(this.activity, this));
+        }
     }
-   
+
     // Initialize timers.
     this.apply()
 
     if (this.confirmFormDiscard) {
         window.onbeforeunload = $.proxy(this.onbeforeunload, this);
-        $(document).on('change', ':input', $.proxy(this.formChange, this));
-        $(document).on('submit', 'form', $.proxy(this.formClean, this));
-        $(document).on('reset', 'form', $.proxy(this.formClean, this));
+        $document.on('change', ':input', $.proxy(this.formChange, this));
+        $document.on('submit', 'form', $.proxy(this.formClean, this));
+        $document.on('reset', 'form', $.proxy(this.formClean, this));
     }
 }
 
@@ -73,7 +76,7 @@ yourlabs.SessionSecurity.prototype = {
         this.$warning.attr('aria-hidden', 'true');
     },
 
-    // Called by click, scroll, mousemove, keyup.
+    // Called by click, scroll, mousemove, keyup, touchstart, touchend, touchmove
     activity: function() {
         var now = new Date();
         if (now - this.lastActivity < 1000)
