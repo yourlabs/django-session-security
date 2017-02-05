@@ -1,3 +1,13 @@
+2.5.0
+
+    - #79 remove compiled binary from source to comply with Debian source code
+      repository policy by @nirgal
+    - #81 support django 1.10 by @eriktelepovsky
+    - #84 a11y support to modal dialog by @lynnco
+    - #85 support for mobile device activity by @kalekseev
+    - #88 dutch translation update by @rdekker1
+    - #91 test django 1.11 and 2.0 instead of 1.7 by @jpic
+
 2.4.0
 
     - #75 Fix vulnerability when SESSION_EXPIRE_AT_BROWSER_CLOSE is off
