@@ -56,11 +56,10 @@ more recent activity was not detected anywhere else - in any other browser tab.
 Requirements
 ------------
 
-- Python 2.7 or 3
+- Python 2.7 or 3.5+
 - jQuery 1.7+
-- Django 1.7+
-- django.contrib.staticfiles or django-staticfiles (included in Pinax) or
-  you're on your own
+- Django 1.8 to 2.0
+- django.contrib.staticfiles or #YoYo
 
 Resources
 ---------
@@ -84,6 +83,3 @@ package updates.
 - `Continuous integration graciously hosted
   <http://travis-ci.org/yourlabs/django-session-security>`_ by `Travis-ci
   <http://travis-ci.org>`_
-
-.. Continuous integration graciously hosted by Travis:
-.. http://travis-ci.org/yourlabs/django-session-security
