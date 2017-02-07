@@ -27,6 +27,8 @@ urlpatterns = [
         SleepView.as_view(template_name='home.html')), name='sleep'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'session_security/', include('session_security.urls')),
+    url(r'^ignore/$', login_required(
+        generic.TemplateView.as_view(template_name='home.html')), name='ignore'),
 ]
 
 if patterns:
