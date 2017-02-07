@@ -16,6 +16,12 @@ PASSIVE_URLS
     it should not be used to update the user's last activity datetime.
     Overridable in ``settings.SESSION_SECURITY_PASSIVE_URLS``.
 
+PASSIVE_URL_NAMES
+    Same as PASSIVE_URLS, but takes Django URL names instead of a path. This
+    is useful in case path names change, or contain parameterized values, and
+    thus cannot be described statically. NOTE: currently namespaces are not
+    handled. Overridable in ``settings.SESSION_SECURITY_PASSIVE_URL_NAMES``.
+
 SESSION_SECURITY_INSECURE
     Set this to True in your settings if you want the project to run without
     having to set SESSION_EXPIRE_AT_BROWSER_CLOSE=True, which you should
