@@ -11,6 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import re
+import six
 import sys, os, os.path
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -21,22 +23,28 @@ sys.path.insert(0, os.path.abspath('../../../../lib/python2.7/site-packages/'))
 from django.conf import settings
 settings.configure()
 settings.ROOT_URLCONF='session_security.urls'
-settings.SESSION_EXPIRE_AT_BROWSER_CLOSE
+settings.SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
 autoclass_content = "both"
 
-project_root = os.path.abspath('../../')
-static_root = os.path.abspath('_static')
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+static_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '_static'))
 import pycco
 for script in ('script',):
     html = pycco.generate_documentation(
         os.path.join(project_root, 'session_security/static/session_security/%s.js' % script),
         static_root
     )
-    html = html.replace('../../../docs/source/_static/pycco.css', 'pycco.css')
-    f = open(os.path.join(static_root, '%s.html' % script), 'w+')
-    f.write(html)
-    f.close()
+    html = re.sub(
+        r'"[^"]*pycco.css',
+        '"pycco.css',
+        html
+    )
+    out = os.path.join(static_root, '%s.html' % script)
+    if os.path.exists(out):
+        os.unlink(out)
+    with open(out, 'wb+') as f:
+        f.write(six.u(html))
 
 # -- General configuration -----------------------------------------------------
 
