@@ -1,10 +1,64 @@
+2.5.1
+
+   - #90: add SESSION_SECURITY_PASSIVE_URL_NAMES setting
+
+2.5.0
+
+    - #79 remove compiled binary from source to comply with Debian source code
+      repository policy by @nirgal
+    - #81 support django 1.10 by @eriktelepovsky
+    - #84 a11y support to modal dialog by @lynnco
+    - #85 support for mobile device activity by @kalekseev
+    - #88 dutch translation update by @rdekker1
+    - #91 test django 1.11 and 2.0 instead of 1.7 by @jpic
+
+2.4.0
+
+    - #75 Fix vulnerability when SESSION_EXPIRE_AT_BROWSER_CLOSE is off
+    - #77 Crash if SESSION_EXPIRE_AT_BROWSER_CLOSE is off
+    - #78 Update test matrix to have Django 1.10 + master instead of just
+      master
+    - #74 Created security mailing list
+
+    Thanks @ClaytonDelay for contacting about the issue.
+    Note that if you don't have SESSION_EXPIRE_AT_BROWSER_CLOSE=True in your
+    settings, then the project won't start unless you set
+    SESSION_SECURITY_INSECURE=True, which you shouldn't.
+
+2.3.3 #69: Encode response to JSON by Tatsh
+
+2.3.2
+
+    - #58: Allow for custom expiration based on request (#65) by @mjschultz
+
+2.3.1
+
+    - #57: added redirectTo parameter to the script by Andrei Coman
+    - test stabilization with django-sbo-selenium
+    - Django 1.10 support
+
+2.3.0 Deprecate support for Django < 1.6
+
+2.2.5 #56: Dj19 support by @eriktelepovsky
+
+2.2.4 #43: Throttle lastActivity updates to once per second by @cuu508
+
+2.2.3 #31: Removed a .mo file
+
+2.2.2
+
+    - #21: Polish translation
+    - #23: French translation fix
+    - #26: Fix an edge bug discovered in multithreaded environments
+    - #30: Use reverse_lazy in settings.py
+    - Added to AUTHORS: @mschettler, @mattbo, @nirgal, @mpasternak
+
 2.2.1: #24: Center the modal on the viewport
 
 2.2.0: Pre-build .mo.
 
-2.1.7 #19: Use consistent formatting
-for the datetime. Fixes random failures
-in test suites. By Scott Sexton.
+2.1.7 #19: Use consistent formatting for the datetime. Fixes random failures in
+      test suites. By Scott Sexton.
 
 2.1.6 #18: Spanish translation
 

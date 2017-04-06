@@ -1,0 +1,28 @@
+# Copyright (C) 2015 Nuno Khan
+# This file is distributed under the same license as the
+# django-session-security package.
+# Nuno Khan <nunok7@gmail.com> 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-16 16:29+0100\n"
+"PO-Revision-Date: 2015-09-18 18:00-0300\n"
+"Last-Translator: Nuno Khan <nunok7 at gmail.com>\n"
+"Language: Portuguese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/session_security/all.html:33
+msgid "You have unsaved changes in a form of this page."
+msgstr "Você tem alterações não guardadas em um formulário desta página."
+
+#: templates/session_security/dialog.html:6
+msgid "Your session is about to expire"
+msgstr "Sua sessão está prestes a expirar"
+
+#: templates/session_security/dialog.html:7
+msgid "Click to extend your session."
+msgstr "Clique para prolongar a sua sessão."

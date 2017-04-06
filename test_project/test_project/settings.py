@@ -27,8 +27,6 @@ DATABASES = {
     }
 }
 
-TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -122,7 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ('django.contrib.auth.context_processors.auth',
  'django.core.context_processors.tz',
  'django.contrib.messages.context_processors.messages')
 
-ROOT_URLCONF = 'test_project.urls'
+ROOT_URLCONF = 'session_security.tests.project.urls'
 
 LOGIN_URL='/admin/'
 LOGOUT_URL='/admin/logout/'
@@ -135,6 +133,17 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            '..',
+            '..',
+            'session_security',
+            'tests',
+            'project',
+            'templates'
+        )
+    ),
 )
 
 INSTALLED_APPS = (
@@ -147,12 +156,14 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'session_security',
+    'sbo_selenium',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
 
 SESSION_SECURITY_EXPIRE_AFTER=10
 SESSION_SECURITY_WARN_AFTER=5
+SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

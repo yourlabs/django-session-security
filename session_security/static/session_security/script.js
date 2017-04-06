@@ -14,6 +14,7 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 //   leave a page with unsaved form data. Setting this will enable an
 //   onbeforeunload handler that doesn't block expire().
 // - events: a list of event types to watch for activity updates.
+// - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we just reload the page
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
@@ -23,23 +24,27 @@ yourlabs.SessionSecurity = function(options) {
     this.lastActivity = new Date();
 
     // Events that would trigger an activity
-    this.events = ['mousemove', 'scroll', 'keyup', 'click'];
-   
+    this.events = ['mousemove', 'scroll', 'keyup', 'click', 'touchstart', 'touchend', 'touchmove'];
+
     // Merge the options dict here.
     $.extend(this, options);
 
     // Bind activity events to update this.lastActivity.
+    var $document = $(document);
     for(var i=0; i<this.events.length; i++) {
-        $(document)[this.events[i]]($.proxy(this.activity, this))
+        if ($document[this.events[i]]) {
+            $document[this.events[i]]($.proxy(this.activity, this));
+        }
     }
-   
+
     // Initialize timers.
     this.apply()
 
     if (this.confirmFormDiscard) {
         window.onbeforeunload = $.proxy(this.onbeforeunload, this);
-        $(document).on('change', ':input', $.proxy(this.formChange, this));
-        $(document).on('submit', 'form', $.proxy(this.formSubmit, this));
+        $document.on('change', ':input', $.proxy(this.formChange, this));
+        $document.on('submit', 'form', $.proxy(this.formClean, this));
+        $document.on('reset', 'form', $.proxy(this.formClean, this));
     }
 }
 
@@ -48,24 +53,37 @@ yourlabs.SessionSecurity.prototype = {
     // seconds.
     expire: function() {
         this.expired = true;
-        window.location.reload();
+        if (this.returnToUrl !== undefined) {
+            window.location.href = this.returnToUrl;
+        }
+        else {
+            window.location.reload();
+        }
     },
     
     // Called when there has been no activity for more than warnAfter
     // seconds.
     showWarning: function() {
         this.$warning.fadeIn('slow');
+        this.$warning.attr('aria-hidden', 'false');
+        $('.session_security_modal').focus();
     },
     
     // Called to hide the warning, for example if there has been activity on
     // the server side - in another browser tab.
     hideWarning: function() {
         this.$warning.hide();
+        this.$warning.attr('aria-hidden', 'true');
     },
 
-    // Called by click, scroll, mousemove, keyup.
+    // Called by click, scroll, mousemove, keyup, touchstart, touchend, touchmove
     activity: function() {
-        this.lastActivity = new Date();
+        var now = new Date();
+        if (now - this.lastActivity < 1000)
+            // Throttle these checks to once per second
+            return;
+
+        this.lastActivity = now;
 
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
@@ -133,8 +151,8 @@ yourlabs.SessionSecurity.prototype = {
         $(e.target).closest('form').attr('data-dirty', true);
     },
 
-    // When a form is submited, unset data-dirty attribute.
-    formSubmit: function(e) {
+    // When a form is submitted or resetted, unset data-dirty attribute.
+    formClean: function(e) {
         $(e.target).removeAttr('data-dirty');
     }
 }

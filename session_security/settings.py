@@ -16,14 +16,18 @@ PASSIVE_URLS
     it should not be used to update the user's last activity datetime.
     Overridable in ``settings.SESSION_SECURITY_PASSIVE_URLS``.
 
-Note that this module will raise a warning if
-``settings.SESSION_EXPIRE_AT_BROWSER_CLOSE`` is not True, because it makes no
-sense to use this app with ``SESSION_EXPIRE_AT_BROWSER_CLOSE`` to False.
+PASSIVE_URL_NAMES
+    Same as PASSIVE_URLS, but takes Django URL names instead of a path. This
+    is useful in case path names change, or contain parameterized values, and
+    thus cannot be described statically. NOTE: currently namespaces are not
+    handled. Overridable in ``settings.SESSION_SECURITY_PASSIVE_URL_NAMES``.
+
+SESSION_SECURITY_INSECURE
+    Set this to True in your settings if you want the project to run without
+    having to set SESSION_EXPIRE_AT_BROWSER_CLOSE=True, which you should
+    because it makes no sense to use this app with
+    ``SESSION_EXPIRE_AT_BROWSER_CLOSE`` to False.
 """
-
-import warnings
-
-from django.core import urlresolvers
 from django.conf import settings
 
 __all__ = ['EXPIRE_AFTER', 'WARN_AFTER', 'PASSIVE_URLS']
@@ -33,9 +37,21 @@ EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
-PASSIVE_URLS += [
-    urlresolvers.reverse_lazy('session_security_ping'),
-]
 
-if not getattr(settings, 'SESSION_EXPIRE_AT_BROWSER_CLOSE', False):
-    warnings.warn('settings.SESSION_EXPIRE_AT_BROWSER_CLOSE is not True')
+PASSIVE_URL_NAMES = getattr(settings, 'SESSION_SECURITY_PASSIVE_URL_NAMES', [])
+
+expire_at_browser_close = getattr(
+    settings,
+    'SESSION_EXPIRE_AT_BROWSER_CLOSE',
+    False
+)
+force_insecurity = getattr(
+    settings,
+    'SESSION_SECURITY_INSECURE',
+    False
+)
+
+if not (expire_at_browser_close or force_insecurity):
+    raise Exception(
+        'Enable SESSION_EXPIRE_AT_BROWSER_CLOSE or SESSION_SECURITY_INSECURE'
+    )

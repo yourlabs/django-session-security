@@ -1,32 +1,27 @@
+sudo: false
 language: python
-matrix:
-  exclude:
-    - python: "3.3"
-      env: DJANGO=1.4
 python:
-  - "2.7"
-  - "3.3"
+  - "3.5"
 env:
-  - DJANGO=1.4
-  - DJANGO=1.5
-  - DJANGO=1.6
+  matrix:
+  - TOXENV=py27-django18
+  - TOXENV=py27-django19
+  - TOXENV=py27-django110
+  - TOXENV=py27-django111
+  - TOXENV=py35-django18
+  - TOXENV=py35-django19
+  - TOXENV=py35-django110
+  - TOXENV=py35-django111
+  - TOXENV=py35-django20
 install:
-  - pip install -q Django==$DJANGO --use-mirrors
-  - pip install pep8 --use-mirrors
-  - pip install https://github.com/dcramer/pyflakes/tarball/master
-  - pip install -q -e . --use-mirrors
-  - pip install selenium==2.37.2 unittest_data_provider six
+  - pip install -U pip
+  - pip install tox
   - pip freeze
-before_script:
-  - "pep8 --exclude=tests,migrations --ignore=E124,E128 session_security"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
 script:
-  - python setup.py test
+  - tox
 notifications:
-  irc: 
-    channels: 
-      - "irc.freenode.org#neoskills"
+  irc:
+    channels:
       - "irc.freenode.org#yourlabs"
     template:
       - "%{repository} (%{commit} %{author}) : %{message} %{build_url} %{compare_url}"

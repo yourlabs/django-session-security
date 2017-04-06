@@ -1,0 +1,31 @@
+# Dutch translation for the django-session-security app.
+# Copyright (C) 2014
+# This file is distributed under the same license as the django-session-security package.
+# Rik Dekker <rdekker@jouwomgeving.nl>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-13 12:36+0100\n"
+"PO-Revision-Date: 2016-12-29 11:27+0100\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.8\n"
+
+#: templates/session_security/all.html:33
+msgid "You have unsaved changes in a form of this page."
+msgstr "Je hebt niet-opgeslagen wijzigingen op deze pagina."
+
+#: templates/session_security/dialog.html:6
+msgid "Your session is about to expire"
+msgstr "Jouw sessie verloopt bijna"
+
+#: templates/session_security/dialog.html:7
+msgid "Click to extend your session."
+msgstr "Klik om je sessie te verlengen."
