@@ -15,6 +15,9 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 //   onbeforeunload handler that doesn't block expire().
 // - events: a list of event types to watch for activity updates.
 // - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we just reload the page
+// - noReload: If this is defined then we expire the session without reloading
+//      the page.  Useful if the page should stay visible but no further actions
+//      should be taken.
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
@@ -55,8 +58,7 @@ yourlabs.SessionSecurity.prototype = {
         this.expired = true;
         if (this.returnToUrl !== undefined) {
             window.location.href = this.returnToUrl;
-        }
-        else {
+        } else if (!this.noReload) {
             window.location.reload();
         }
     },
