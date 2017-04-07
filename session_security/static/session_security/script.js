@@ -16,8 +16,12 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 // - events: a list of event types to watch for activity updates.
 // - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we just reload the page
 // - noReload: If this is defined then we expire the session without reloading
-//      the page.  Useful if the page should stay visible but no further actions
-//      should be taken.
+//      the page.  Useful if a page requires a lot of navigation or
+//      interaction to get to and jumping to a login page would make it
+//      difficult to recreate the state.  SECURITY WARNING: this option is
+//      inherently less secure than reloading the page.  Any sensitive
+//      information will remain visible and could potentially be copied / pasted
+//      after expiration.  
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
