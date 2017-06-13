@@ -51,7 +51,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         """ Update last activity time or logout. """
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return
 
         now = datetime.now()
