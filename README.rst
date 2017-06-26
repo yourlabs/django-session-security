@@ -1,4 +1,9 @@
-.. image:: https://secure.travis-ci.org/yourlabs/django-session-security.png?branch=master
+.. image:: https://img.shields.io/pypi/v/django-session-security.svg
+        :target: https://pypi.python.org/pypi/django-session-security
+
+.. image:: https://img.shields.io/travis/yourlabs/django-session-security.svg
+        :target: https://travis-ci.org/yourlabs/django-session-security
+
 
 This app provides a mechanism to logout inactive authenticated users. An
 inactive browser should be logged out automatically if the user left his
