@@ -11,6 +11,7 @@ Make sure that it is placed **after** authentication middlewares.
 
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse, resolve, Resolver404
 
@@ -62,6 +63,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
+            request._messages._queued_messages = []
+            messages.info(request, 'Your session has expired (%s). Please login again.' % delta)
             logout(request)
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
