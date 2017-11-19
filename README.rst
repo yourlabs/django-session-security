@@ -58,6 +58,26 @@ Same goes to expire after ``settings.SESSION_SECURITY_EXPIRE_AFTER`` seconds.
 Javascript will first make an ajax request to PingView to ensure that another
 more recent activity was not detected anywhere else - in any other browser tab.
 
+Note to SSO (single sign-on) users
+----------------------------------
+
+By default, this package reloads the current page after timeout, prompting a
+user to log back into the application to resume where they left off.  When
+using SSO, however, this can produce confusing behavior.  For example, if the
+SSO session is still alive, a user may by automatically logged back into the
+application.
+
+To avoid this behavior, some users (c.f. issue #93) want the timeout to end the
+SSO login as well.  On a properly configured application, this will happen if
+you set ``settings.SESSION_SECURITY_REDIRECT_TO_LOGOUT`` to `True`.  When the
+timeout is reached, users will be redirected to the application's logout page
+configured at ``settings.LOGOUT_REDIRECT_URL``.
+
+**Please note that this is not an adequate security model.  If a user closes
+the browser page before logging out, this setting will have no effect on the
+SSO session.**  At minimum, a similar timeout should be added to the SSO server
+for users on "public machines" to ensure the SSO session is also timed out.
+
 Requirements
 ------------
 

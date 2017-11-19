@@ -29,6 +29,9 @@ It provides sensible defaults so you could start with just::
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},
+                {% if request.redirect_to_logout %}
+                returnToUrl: {% url 'logout' %},
+                {% endif %}
                 confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
             });
         </script>
