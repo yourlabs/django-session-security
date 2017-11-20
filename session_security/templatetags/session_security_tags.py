@@ -16,5 +16,5 @@ def warn_after(request):
 
 
 @register.filter
-def session_security_use_logout(request):
+def redirect_to_logout(request):
     return REDIRECT_TO_LOGOUT
