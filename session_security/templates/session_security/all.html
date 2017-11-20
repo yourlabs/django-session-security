@@ -29,7 +29,7 @@ It provides sensible defaults so you could start with just::
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},
-                {% with request|redirect_to_logout=redirect_to_logout %}
+                {% with redirect_to_logout=request|redirect_to_logout %}
                 {% if redirect_to_logout %}
                 returnToUrl: {% url 'logout' %},
                 {% endif %}
