@@ -18,7 +18,7 @@ class TemplateTests(TestCase):
         )
 
         self.assertNotIn(
-            'returnToUrl',
+            b'returnToUrl',
             resp.content
         )
 
@@ -31,6 +31,6 @@ class TemplateTests(TestCase):
             )
 
         self.assertIn(
-            'returnToUrl',
+            b'returnToUrl',
             resp.content
         )
