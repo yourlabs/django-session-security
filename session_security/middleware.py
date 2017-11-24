@@ -21,7 +21,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+from .settings import ADMIN_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -47,6 +47,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def get_expire_seconds(self, request):
         """Return time (in seconds) before the user should be logged out."""
+        if request.user.is_superuser():
+            return ADMIN_EXPIRE_AFTER
         return EXPIRE_AFTER
 
     def process_request(self, request):
