@@ -7,13 +7,13 @@ register = template.Library()
 
 @register.filter
 def expire_after(request):
-    if request.user.is_superuser():
+    if request.user.is_superuser:
         return ADMIN_EXPIRE_AFTER
     return EXPIRE_AFTER
 
 
 @register.filter
 def warn_after(request):
-    if request.user.is_superuser():
+    if request.user.is_superuser:
         return ADMIN_WARN_AFTER
     return WARN_AFTER

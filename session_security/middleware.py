@@ -47,7 +47,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def get_expire_seconds(self, request):
         """Return time (in seconds) before the user should be logged out."""
-        if request.user.is_superuser():
+        if request.user.is_superuser:
             return ADMIN_EXPIRE_AFTER
         return EXPIRE_AFTER
 
