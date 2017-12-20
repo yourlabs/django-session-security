@@ -12,7 +12,7 @@ Make sure that it is placed **after** authentication middlewares.
 from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
-from django.core.urlresolvers import reverse, resolve, Resolver404
+from django.urls import reverse, resolve, Resolver404
 
 try:
     from django.utils.deprecation import MiddlewareMixin
