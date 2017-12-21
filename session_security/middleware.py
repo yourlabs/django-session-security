@@ -11,6 +11,7 @@ Make sure that it is placed **after** authentication middlewares.
 
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse, resolve, Resolver404
 
@@ -21,7 +22,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+from .settings import EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES, LOGOUT_MESSAGE
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -62,6 +63,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
+            if LOGOUT_MESSAGE:
+                messages.add_message(request, messages.WARNING, LOGOUT_MESSAGE)
             logout(request)
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
