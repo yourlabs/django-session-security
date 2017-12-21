@@ -12,7 +12,10 @@ Make sure that it is placed **after** authentication middlewares.
 from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
-from django.urls import reverse, resolve, Resolver404
+try: # Django 2.0
+    from django.urls import reverse, resolve, Resolver404
+except: # Django < 2.0
+    from django.core.urlresolvers import reverse, resolve, Resolver404
 
 try:
     from django.utils.deprecation import MiddlewareMixin
@@ -51,7 +54,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         """ Update last activity time or logout. """
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return
 
         now = datetime.now()
