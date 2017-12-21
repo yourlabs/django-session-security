@@ -136,7 +136,10 @@ yourlabs.SessionSecurity.prototype = {
             nextPing = this.warnAfter - idleFor;
         }
 
-        this.timeout = setTimeout($.proxy(this.ping, this), nextPing * 1000);
+        // setTimeout expects the timeout value not to exceed
+        // a 32-bit unsigned int, so cap the value
+        var milliseconds = Math.min(nextPing * 1000, 2147483647)
+        this.timeout = setTimeout($.proxy(this.ping, this), milliseconds);
     },
 
     // onbeforeunload handler.
