@@ -13,7 +13,10 @@ from datetime import datetime, timedelta
 
 import django
 from django.contrib.auth import logout
-from django.core.urlresolvers import reverse, resolve, Resolver404
+try: # Django 2.0
+    from django.urls import reverse, resolve, Resolver404
+except: # Django < 2.0
+    from django.core.urlresolvers import reverse, resolve, Resolver404
 
 try:
     from django.utils.deprecation import MiddlewareMixin
@@ -52,6 +55,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         """ Update last activity time or logout. """
+        
         if django.VERSION < (1, 10):
             is_authenticated = request.user.is_authenticated()
         else:
