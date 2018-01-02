@@ -72,7 +72,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
-            logout(request)
+            self.handle_logout(request)
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
@@ -104,3 +104,11 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
         # Update the session
         set_last_activity(request.session, last_activity)
+
+    def handle_logout(self, request):
+        """
+        Log out user.
+
+        Override this method to add logging or additional processing after timeout.
+        """
+        logout(request)
