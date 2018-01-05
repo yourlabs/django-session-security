@@ -1,3 +1,10 @@
+2.6.0-rc1
+
+    #103: Django 2.0 urlresolvers import fix by @Ruffle0
+    #98: Call is_authenticated property instead of function for Django 2.0 by @tpeaton
+    #105: Ensure setTimeout() millisecond parameter doesn't exceed max value by @abottc
+    Polish translation update by @mpasternak
+
 2.5.1
 
    - #90: add SESSION_SECURITY_PASSIVE_URL_NAMES setting
