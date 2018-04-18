@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse, resolve, Resolver404
+from django.views import defaults
 
 try:
     from django.utils.deprecation import MiddlewareMixin
@@ -66,6 +67,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             request._messages._queued_messages = []
             messages.info(request, 'Your session has expired (%s). Please login again.' % delta)
             logout(request)
+            if request.is_ajax():
+                return defaults.http.HttpResponseForbidden('403 Forbidden: %s' % msg, content_type='text/html')
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
