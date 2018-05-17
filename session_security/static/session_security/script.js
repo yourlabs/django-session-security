@@ -84,11 +84,16 @@ yourlabs.SessionSecurity.prototype = {
             return;
 
         this.lastActivity = now;
+        var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
             // block other browser tabs from expiring.
             this.ping();
+        } else if (idleFor >= this.expireAfter) {
+            // Enforces checking whether a user's session is expired. This 
+            // ensures a user being redirected instead of waiting until nextPing. 
+            this.expire();
         }
 
         this.hideWarning();
