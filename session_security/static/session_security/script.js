@@ -83,8 +83,8 @@ yourlabs.SessionSecurity.prototype = {
             // Throttle these checks to once per second
             return;
 
+        var idleFor = Math.floor((now - this.lastActivity) / 1000);
         this.lastActivity = now;
-        var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
