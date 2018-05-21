@@ -119,12 +119,15 @@ yourlabs.SessionSecurity.prototype = {
         this.apply();
     },
 
+    idleForSeconds: function() { return Math.floor((new Date() - this.lastActivity) / 1000); },
+    isExpired: function() { return this.idleForSeconds >= this.expireAfter; },
+
     // Apply warning or expiry, setup next ping
     apply: function() {
         // Cancel timeout if any, since we're going to make our own
         clearTimeout(this.timeout);
 
-        var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
+        var idleFor = this.idleForSeconds();
 
         if (idleFor >= this.expireAfter) {
             return this.expire();
