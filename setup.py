@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from setuptools import setup, find_packages, Command
 import os, sys
 
@@ -44,7 +43,7 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-session-security',
-    version='2.6.2',
+    version='2.6.3',
     description='Client and server side session timeout with warnings',
     author='∞',
     author_email='yourlabs@googlegroups.com',
