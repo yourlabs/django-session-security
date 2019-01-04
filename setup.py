@@ -43,7 +43,7 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-session-security',
-    version='2.6.3',
+    version='2.6.4',
     description='Client and server side session timeout with warnings',
     author='∞',
     author_email='yourlabs@googlegroups.com',
