@@ -58,6 +58,9 @@ setup(
     install_requires=[
         'django',
     ],
+    tests_require=[
+        'mock>=2.0.0',
+    ],
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',

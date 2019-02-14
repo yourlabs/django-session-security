@@ -3,6 +3,8 @@ import unittest
 
 from django.test.client import Client
 from django import test
+from session_security.compat import mock
+from session_security.middleware import SessionSecurityMiddleware
 from session_security.utils import set_last_activity, get_last_activity
 from datetime import datetime, timedelta
 
@@ -36,6 +38,7 @@ class MiddlewareTestCase(SettingsMixin, test.TestCase):
         self.client.login(username='test', password='test')
         response = self.client.get('/admin/')
         time.sleep(self.max_warn_after)
+        time.sleep(self.max_warn_after)
         response = self.client.get('/admin/')
         self.assertTrue('_auth_user_id' in self.client.session)
         time.sleep(self.min_warn_after)
@@ -66,3 +69,11 @@ class MiddlewareTestCase(SettingsMixin, test.TestCase):
         response = self.client.get('/ignore/')
         activity3 = get_last_activity(self.client.session)
         self.assertEqual(activity2, activity3)
+
+    @mock.patch.object(SessionSecurityMiddleware, "handle_logout")
+    def test_logout_handler(self, mock_handler):
+        self.client.login(username='test', password='test')
+        response = self.client.get('/admin/')
+        time.sleep(self.max_expire_after)
+        response = self.client.get('/admin/')
+        mock_handler.assert_called_once()
