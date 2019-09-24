@@ -24,3 +24,11 @@
     overflow: auto;
     text-align: center;
 }
+
+.session_security_div {
+   background-color: #ff8c00;
+   color: #000;
+   font-weight: bold;
+   text-align: center;
+   display: none;
+}

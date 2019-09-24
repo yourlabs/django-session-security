@@ -30,7 +30,10 @@ It provides sensible defaults so you could start with just::
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},
                 confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
+                loggedOffMessage: 'True',
             });
         </script>
     {% endlocalize %}    
 {% endif %}
+<div class='session_security_div' id="loggedOff"><span>You have been logged off</span></div>
+<script type="text/javascript">if(window.location.href.search( 'loggedOff' ) > 0) document.getElementById('loggedOff').style.display = "block";</script>
