@@ -55,3 +55,27 @@ class ScriptTestCase(BaseLiveServerTestCase):
             self.assert_visible('#session_security_warning')
         delta = datetime.datetime.now() - start
         self.assertGreaterEqual(delta.seconds, self.min_warn_after)
+
+    def test_no_reload(self):
+        locations = []
+        for win in self.sel.window_handles:
+            self.sel.switch_to_window(win)
+            # can we check the value of sessionSecurity.noReload here??
+            self.assertEqual(False, self.sel.execute_script(
+                'return sessionSecurity.noReload'))
+            locations.append(self.sel.current_url)
+            # Set the noReload variable
+            self.sel.execute_script('sessionSecurity.noReload = true')
+            self.assertEqual(True, self.sel.execute_script(
+                'return sessionSecurity.noReload'))
+
+        time.sleep(self.max_expire_after)
+
+        # Should still be at the same URL
+        for (idx, win) in enumerate(self.sel.window_handles):
+            self.sel.switch_to_window(win)
+            self.assertEqual(locations[idx], self.sel.current_url)
+
+            # Even if we hit a key
+            self.press_space()
+            self.assertEqual(locations[idx], self.sel.current_url)

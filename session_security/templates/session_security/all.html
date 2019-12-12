@@ -29,7 +29,9 @@ It provides sensible defaults so you could start with just::
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},
-                confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
+                confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}",
+                noReload: false  // If this is set the session is exprired but the current page remains visible
+
             });
         </script>
     {% endlocalize %}    
