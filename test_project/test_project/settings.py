@@ -6,13 +6,19 @@ import posixpath
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
+SESSION_SECURITY_PASSIVE_URL_NAMES = ['ignore']
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+
+#'django.template.backends.django.DjangoTemplates' instance must be configured in TEMPLATES in order to use the admin application.
+#?: (admin.E408) 'django.contrib.auth.middleware.AuthenticationMiddleware' must be in MIDDLEWARE in order to use the admin application.
+##?: (admin.E409) 'django.contrib.messages.middleware.MessageMiddleware' must be in MIDDLEWARE in order to use the admin application.
+#?: (admin.E410) 'django.contrib.sessions.middleware.SessionMiddleware
+
 
 MANAGERS = ADMINS
 
@@ -91,15 +97,39 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0yv5dmym_%#=60h@_9qcp@*^+(towd1xic3bp-3&amp;ntjf!p&amp;7)y'
+TEMPLATE_DIRS = [
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, './../session_security/tests/project/templates'),
+    os.path.join(PROJECT_ROOT, 'templates')
+
+]
 
 # List of callables that know how to import templates from various sources.
+#TEMPLATES=['django.template.backends.django.DjangoTemplates']
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': TEMPLATE_DIRS,
+        'APP_DIRS': [TEMPLATE_DIRS],
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.app_directories.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,26 +155,10 @@ ROOT_URLCONF = 'session_security.tests.project.urls'
 LOGIN_URL='/admin/'
 LOGOUT_URL='/admin/logout/'
 
-# Python dotted path to the WSGI application used by Django's runserver.
+# Python dotted path to the WSGI app8 lication used by Django's runserver.
 WSGI_APPLICATION = 'test_project.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates'),
-    os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '..',
-            '..',
-            'session_security',
-            'tests',
-            'project',
-            'templates'
-        )
-    ),
-)
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -156,7 +170,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'session_security',
-    'sbo_selenium',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

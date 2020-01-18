@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import six
 
 import time
 from datetime import datetime, timedelta
@@ -26,7 +25,7 @@ class ViewsTestCase(test.TestCase):
         self.client.logout()
         self.client.get('/admin/')
         response = self.client.get('/session_security/ping/?idleFor=1')
-        self.assertEqual(response.content, six.b('"logout"'))
+        self.assertEqual(response.content, str.encode('"logout"'))
 
     def ping_provider(x=None):
         return (
@@ -51,7 +50,7 @@ class ViewsTestCase(test.TestCase):
         response = self.client.get('/session_security/ping/?idleFor=%s' %
                                    client)
 
-        self.assertEqual(response.content, six.b(expected))
+        self.assertEqual(response.content, str.encode(expected))
         self.assertEqual(authenticated, '_auth_user_id' in self.client.session)
 
         settings.WARN_AFTER, settings.EXPIRE_AFTER = old_warn, old_expire

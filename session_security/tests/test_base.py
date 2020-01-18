@@ -4,13 +4,13 @@ import atexit
 
 from django.contrib.auth.models import User
 
-from sbo_selenium import SeleniumTestCase
-
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.phantomjs.webdriver import WebDriver
+from selenium import webdriver;
+from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver import Remote
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import LiveServerTestCase
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -31,19 +31,29 @@ class SettingsMixin(object):
 
 
 class BaseLiveServerTestCase(SettingsMixin, StaticLiveServerTestCase,
-                             SeleniumTestCase):
+                             LiveServerTestCase):
 
     fixtures = ['session_security_test_user']
 
     def setUp(self):
-        super(BaseLiveServerTestCase, self).setUp()
-        self.get('/admin/')
+        SettingsMixin.setUp(self)
+        from selenium.webdriver.firefox.options import Options as FirefoxOptions
+
+        options = FirefoxOptions()
+        options.add_argument("--headless")
+        super(LiveServerTestCase, self).setUp()
+        self.sel= webdriver.Firefox(options=options)
+        self.sel.get('%s%s' % (self.live_server_url, '/admin/'))
         self.sel.find_element_by_name('username').send_keys('test')
         self.sel.find_element_by_name('password').send_keys('test')
         self.sel.find_element_by_xpath('//input[@value="Log in"]').click()
         self.sel.execute_script('window.open("/admin/", "other")')
 
     def press_space(self):
-        a = ActionChains(self.sel)
-        a.key_down(Keys.SPACE)
-        a.perform()
+        body = self.sel.find_element_by_tag_name("body")
+        body.send_keys(Keys.SPACE)
+    def tearDown(self):
+        self.sel.quit()
+    @classmethod
+    def tearDownClass(cls):
+        super(BaseLiveServerTestCase, cls).tearDownClass()
