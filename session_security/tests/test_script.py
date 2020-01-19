@@ -24,8 +24,8 @@ class ScriptTestCase(BaseLiveServerTestCase):
                 el = WebDriverWait(self.sel, self.max_warn_after).until(
                 expected_conditions.visibility_of_element_located((By.ID, "session_security_warning")))
                 assert(el.is_displayed())
-            finally:
-                pass
+            except:
+                assert(False) #max_warn_after did not display el.
         end = datetime.datetime.now()
         delta = end - start
 
@@ -38,12 +38,11 @@ class ScriptTestCase(BaseLiveServerTestCase):
                 el = WebDriverWait(self.sel, self.max_expire_after).until(
                 expected_conditions.visibility_of_element_located((By.ID, "id_password")))
                 assert(el.is_displayed())
-            finally:
-                pass
-
-        delta = datetime.datetime.now() - start
-        self.assertGreaterEqual(delta.seconds, self.min_expire_after)
-        self.assertLessEqual(delta.seconds, self.max_expire_after)
+                delta = datetime.datetime.now() - start
+                self.assertGreaterEqual(delta.seconds, self.min_expire_after)
+                self.assertLessEqual(delta.seconds, self.max_expire_after)
+            except:
+                assert(False) #Test fails if timeout expires
 
     def test_activity_hides_warning(self):
         time.sleep(6 * .7)
@@ -61,10 +60,11 @@ class ScriptTestCase(BaseLiveServerTestCase):
                 expected_conditions.invisibility_of_element_located((By.ID, "session_security_warning")))
 
                 assert(not el.is_displayed())
-            finally:
-                self.sel.quit()
-        finally:
-            self.sel.quit()
+            except:
+                assert(False)  #Test fails if element invisibilty times out
+        except:
+            assert(False)  #Test fails if element visility times out
+
 
 
     def test_activity_prevents_warning(self):
