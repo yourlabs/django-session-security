@@ -24,8 +24,8 @@ class ViewsTestCase(test.TestCase):
     def test_anonymous(self):
         self.client.logout()
         self.client.get('/admin/')
-        response = self.client.get('/session_security/ping/?idleFor=1')
-        self.assertEqual(response.content, str.encode('"logout"'))
+        response = self.client.get('/session_security/ping/?idleFor=81')
+        self.assertEqual(response.content, '"logout"'.encode("utf-8"))
 
     def ping_provider(x=None):
         return (
@@ -50,7 +50,7 @@ class ViewsTestCase(test.TestCase):
         response = self.client.get('/session_security/ping/?idleFor=%s' %
                                    client)
 
-        self.assertEqual(response.content, str.encode(expected))
+        self.assertEqual(response.content, expected.encode("utf-8"))
         self.assertEqual(authenticated, '_auth_user_id' in self.client.session)
 
         settings.WARN_AFTER, settings.EXPIRE_AFTER = old_warn, old_expire
