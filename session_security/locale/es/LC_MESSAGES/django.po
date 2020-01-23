@@ -27,5 +27,5 @@ msgid "Your session is about to expire"
 msgstr "Tu sesión está a punto de caducar"
 
 #: templates/session_security/dialog.html:7
-msgid "Click to extend your session."
-msgstr "Haz click para continuar la sesión"
+msgid "Click or type to extend your session."
+msgstr "Haz click o pulse una tecla para continuar la sesión"
