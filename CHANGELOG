@@ -1,3 +1,7 @@
+2.6.6 Django 3.0 support
+
+And test fix, by @jsm222, big thanks !!
+
 2.6.1 #113: Check if session expired on activity by @rbntimes
 
 2.6.0 Release
