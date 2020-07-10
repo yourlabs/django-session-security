@@ -3,7 +3,7 @@
 <div id="session_security_warning" class="session_security" aria-hidden="true" role="dialog">
     <div class="session_security_overlay"></div>
     <div class="session_security_modal" role="document" tabindex="-1">
-        <h3>{% trans 'Your session is about to expire' %}</h3>
+        <h3>{% trans 'Your session is about to expire' %}: <span id="session_security_counter"></span> {% trans 'seconds' %}</h3></h3>
         <p>{% trans 'Click or type to extend your session.' %}</p>
     </div>
 </div>
