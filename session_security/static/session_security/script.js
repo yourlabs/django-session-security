@@ -135,7 +135,7 @@ yourlabs.SessionSecurity.prototype = {
         if (idleFor >= this.expireAfter) {
             return this.expire();
         } else if (idleFor >= this.warnAfter) {
-            if (!this.counterStarted && this.secondsSpanID){
+            if (!this.counterStarted && this.secondsElementID){
                 this.startCounter();
             }
             this.showWarning();
@@ -156,10 +156,10 @@ yourlabs.SessionSecurity.prototype = {
         let expireAfter = this.expireAfter;
         let warnAfter = this.warnAfter;
         let defaultTimeLeft = expireAfter - warnAfter;
-        let spanTarget = this.secondsSpanID;
+        let elementTarget = this.secondsElementID;
         let counterStarted = false;
         if (!this.counterStarted) {
-            document.getElementById(spanTarget).innerHTML = defaultTimeLeft.toString();
+            document.getElementById(elementTarget).innerHTML = defaultTimeLeft.toString();
             counterStarted = true;
         }
         var t = new Date();
@@ -169,7 +169,7 @@ yourlabs.SessionSecurity.prototype = {
             var distance = t - now;
             var seconds = Math.floor((distance % (1000 * expireAfter)) / 1000);
             if (distance > 0) {
-                document.getElementById(spanTarget).innerHTML = seconds.toString();
+                document.getElementById(elementTarget).innerHTML = seconds.toString();
             }
         }, 1000);
         this.counterStarted = counterStarted;
