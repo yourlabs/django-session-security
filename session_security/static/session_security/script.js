@@ -178,6 +178,8 @@ yourlabs.SessionSecurity.prototype = {
     stopCounter: function(){
       clearTimeout(this.counterTimeout);
       this.counterStarted = false;
+      let defaultTimeLeft = this.expireAfter - this.warnAfter;
+      document.getElementById(this.secondsElementID).innerHTML = defaultTimeLeft.toString();
     },
 
     // onbeforeunload handler.
