@@ -159,7 +159,7 @@ yourlabs.SessionSecurity.prototype = {
         let spanTarget = this.secondsSpanID;
         let counterStarted = false;
         if (!this.counterStarted) {
-            document.getElementById(spanTarget).innerHTML = " in " + defaultTimeLeft.toString() + " seconds";
+            document.getElementById(spanTarget).innerHTML = defaultTimeLeft.toString();
             counterStarted = true;
         }
         var t = new Date();
@@ -169,7 +169,7 @@ yourlabs.SessionSecurity.prototype = {
             var distance = t - now;
             var seconds = Math.floor((distance % (1000 * expireAfter)) / 1000);
             if (distance > 0) {
-                document.getElementById(spanTarget).innerHTML = " in " + seconds.toString() + " seconds";
+                document.getElementById(spanTarget).innerHTML = seconds.toString();
             }
         }, 1000);
         this.counterStarted = counterStarted;
