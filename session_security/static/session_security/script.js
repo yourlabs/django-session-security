@@ -142,7 +142,9 @@ yourlabs.SessionSecurity.prototype = {
             nextPing = this.expireAfter - idleFor;
         } else {
             this.hideWarning();
-            this.stopCounter();
+            if (this.counterStarted && this.counterElementID){
+                this.stopCounter();
+            }
             nextPing = this.warnAfter - idleFor;
         }
 
