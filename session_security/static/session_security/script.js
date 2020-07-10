@@ -135,7 +135,7 @@ yourlabs.SessionSecurity.prototype = {
         if (idleFor >= this.expireAfter) {
             return this.expire();
         } else if (idleFor >= this.warnAfter) {
-            if (!this.counterStarted && this.secondsElementID){
+            if (!this.counterStarted && this.counterElementID){
                 this.startCounter();
             }
             this.showWarning();
@@ -156,7 +156,7 @@ yourlabs.SessionSecurity.prototype = {
         let expireAfter = this.expireAfter;
         let warnAfter = this.warnAfter;
         let defaultTimeLeft = expireAfter - warnAfter;
-        let elementTarget = this.secondsElementID;
+        let elementTarget = this.counterElementID;
         let counterStarted = false;
         if (!this.counterStarted) {
             document.getElementById(elementTarget).innerHTML = defaultTimeLeft.toString();
@@ -179,7 +179,7 @@ yourlabs.SessionSecurity.prototype = {
       clearTimeout(this.counterTimeout);
       this.counterStarted = false;
       let defaultTimeLeft = this.expireAfter - this.warnAfter;
-      document.getElementById(this.secondsElementID).innerHTML = defaultTimeLeft.toString();
+      document.getElementById(this.counterElementID).innerHTML = defaultTimeLeft.toString();
     },
 
     // onbeforeunload handler.
