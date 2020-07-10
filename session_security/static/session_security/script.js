@@ -60,7 +60,7 @@ yourlabs.SessionSecurity.prototype = {
             window.location.reload();
         }
     },
-    
+
     // Called when there has been no activity for more than warnAfter
     // seconds.
     showWarning: function() {
@@ -68,7 +68,7 @@ yourlabs.SessionSecurity.prototype = {
         this.$warning.attr('aria-hidden', 'false');
         $('.session_security_modal').focus();
     },
-    
+
     // Called to hide the warning, for example if there has been activity on
     // the server side - in another browser tab.
     hideWarning: function() {
@@ -87,11 +87,11 @@ yourlabs.SessionSecurity.prototype = {
         this.lastActivity = now;
 
         if (idleFor >= this.expireAfter) {
-            // Enforces checking whether a user's session is expired. This 
-            // ensures a user being redirected instead of waiting until nextPing. 
+            // Enforces checking whether a user's session is expired. This
+            // ensures a user being redirected instead of waiting until nextPing.
             this.expire();
         }
-        
+
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
             // block other browser tabs from expiring.
@@ -130,16 +130,19 @@ yourlabs.SessionSecurity.prototype = {
     apply: function() {
         // Cancel timeout if any, since we're going to make our own
         clearTimeout(this.timeout);
-
         var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
         if (idleFor >= this.expireAfter) {
             return this.expire();
         } else if (idleFor >= this.warnAfter) {
+            if (!this.counterStarted && this.secondsSpanID){
+                this.startCounter();
+            }
             this.showWarning();
             nextPing = this.expireAfter - idleFor;
         } else {
             this.hideWarning();
+            this.stopCounter();
             nextPing = this.warnAfter - idleFor;
         }
 
@@ -147,6 +150,34 @@ yourlabs.SessionSecurity.prototype = {
         // a 32-bit unsigned int, so cap the value
         var milliseconds = Math.min(nextPing * 1000, 2147483647)
         this.timeout = setTimeout($.proxy(this.ping, this), milliseconds);
+    },
+
+    startCounter: function(){
+        let expireAfter = this.expireAfter;
+        let warnAfter = this.warnAfter;
+        let defaultTimeLeft = expireAfter - warnAfter;
+        let spanTarget = this.secondsSpanID;
+        let counterStarted = false;
+        if (!this.counterStarted) {
+            document.getElementById(spanTarget).innerHTML = " in " + defaultTimeLeft.toString() + " seconds";
+            counterStarted = true;
+        }
+        var t = new Date();
+        t.setSeconds(t.getSeconds() + defaultTimeLeft);
+        this.counterTimeout = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = t - now;
+            var seconds = Math.floor((distance % (1000 * expireAfter)) / 1000);
+            if (distance > 0) {
+                document.getElementById(spanTarget).innerHTML = " in " + seconds.toString() + " seconds";
+            }
+        }, 1000);
+        this.counterStarted = counterStarted;
+    },
+
+    stopCounter: function(){
+      clearTimeout(this.counterTimeout);
+      this.counterStarted = false;
     },
 
     // onbeforeunload handler.
