@@ -1,27 +1,19 @@
 sudo: false
 language: python
 python:
+  - "2.7"
   - "3.5"
-env:
-  matrix:
-  - TOXENV=py27-django18
-  - TOXENV=py27-django19
-  - TOXENV=py27-django110
-  - TOXENV=py27-django111
-  - TOXENV=py35-django18
-  - TOXENV=py35-django19
-  - TOXENV=py35-django110
-  - TOXENV=py35-django111
-  - TOXENV=py35-django20
+  - "3.6"
+  - "3.7"
+  - "3.8"
+before_install:
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
+  - mkdir geckodriver
+  - tar -xzf geckodriver-v0.26.0-linux64.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 install:
   - pip install -U pip
-  - pip install tox
+  - pip install tox-travis
   - pip freeze
 script:
   - tox
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.org#yourlabs"
-    template:
-      - "%{repository} (%{commit} %{author}) : %{message} %{build_url} %{compare_url}"

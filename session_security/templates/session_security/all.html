@@ -8,7 +8,7 @@ It provides sensible defaults so you could start with just::
 
 {% load session_security_tags %}
 {% load i18n l10n %}
-{% load static from staticfiles %}
+{% load static %}
 
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}

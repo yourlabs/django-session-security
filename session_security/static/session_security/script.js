@@ -83,15 +83,22 @@ yourlabs.SessionSecurity.prototype = {
             // Throttle these checks to once per second
             return;
 
+        var idleFor = Math.floor((now - this.lastActivity) / 1000);
         this.lastActivity = now;
 
+        if (idleFor >= this.expireAfter) {
+            // Enforces checking whether a user's session is expired. This 
+            // ensures a user being redirected instead of waiting until nextPing. 
+            this.expire();
+        }
+        
         if (this.$warning.is(':visible')) {
             // Inform the server that the user came back manually, this should
             // block other browser tabs from expiring.
             this.ping();
+            // The hideWarning should only be called when the warning is visible
+            this.hideWarning();
         }
-
-        this.hideWarning();
     },
 
     // Hit the PingView with the number of seconds since last activity.
@@ -136,7 +143,10 @@ yourlabs.SessionSecurity.prototype = {
             nextPing = this.warnAfter - idleFor;
         }
 
-        this.timeout = setTimeout($.proxy(this.ping, this), nextPing * 1000);
+        // setTimeout expects the timeout value not to exceed
+        // a 32-bit unsigned int, so cap the value
+        var milliseconds = Math.min(nextPing * 1000, 2147483647)
+        this.timeout = setTimeout($.proxy(this.ping, this), milliseconds);
     },
 
     // onbeforeunload handler.
