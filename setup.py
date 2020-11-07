@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from setuptools import setup, find_packages, Command
 import os, sys
 
@@ -42,10 +43,10 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-session-security',
-    version='2.5.1',
-    description='Let the user secure his session for usage in public computers',
-    author='James Pic',
-    author_email='jamespic@gmail.com',
+    version='2.6.6',
+    description='Client and server side session timeout with warnings',
+    author='∞',
+    author_email='yourlabs@googlegroups.com',
     url='https://github.com/yourlabs/django-session-security',
     packages=find_packages(),
     include_package_data=True,
@@ -71,4 +72,3 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
 )
-

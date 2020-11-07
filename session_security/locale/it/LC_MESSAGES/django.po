@@ -1,14 +1,14 @@
-# Spanish translation for the django-session-security app.
-# Copyright (C) 2014
+# Italian translation for the django-session-security app.
+# Copyright (C) 2019
 # This file is distributed under the same license as the django-session-security package.
-# Jose Antonio Martin <jantonio.martin@gmail.com>, 2014.
+# Ali Hasan Imam <imam.aiub@gmail.com>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-13 12:36+0100\n"
+"POT-Creation-Date: 2019-05-14 14:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/session_security/all.html:33
+#: session_security/templates/session_security/all.html:32
 msgid "You have unsaved changes in a form of this page."
-msgstr "Un formulario de esta página tiene cambios sin guardar"
+msgstr "Hai modifiche non salvate nella form di questa pagina."
 
-#: templates/session_security/dialog.html:6
+#: session_security/templates/session_security/dialog.html:6
 msgid "Your session is about to expire"
-msgstr "Tu sesión está a punto de caducar"
+msgstr "La tua sessione sta per scadere"
 
-#: templates/session_security/dialog.html:7
+#: session_security/templates/session_security/dialog.html:7
 msgid "Click or type to extend your session."
-msgstr "Haz click o pulse una tecla para continuar la sesión"
+msgstr "Fai clic per estendere la sessione."
