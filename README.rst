@@ -1,8 +1,9 @@
 .. image:: https://img.shields.io/pypi/v/django-session-security.svg
         :target: https://pypi.python.org/pypi/django-session-security
 
-.. image:: https://img.shields.io/travis/yourlabs/django-session-security.svg
-        :target: https://travis-ci.org/yourlabs/django-session-security
+.. image:: https://github.com/yourlabs/django-session-security/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/yourlabs/django-session-security/actions
+
 
 
 This app provides a mechanism to logout inactive authenticated users. An
