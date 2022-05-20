@@ -1,4 +1,4 @@
-name: django-denorm-iplweb testing
+name: django-session-security testing
 
 on:
   - push
