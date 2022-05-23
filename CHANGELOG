@@ -1,7 +1,7 @@
 2.6.7-pre0
 
 	Moved CI from Travis-CI to GitHub Actions
-	Django 4.0 & 4.1 support
+	Django 4.0 support
 
 2.6.6 Django 3.0 support
 
