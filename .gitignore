@@ -7,3 +7,7 @@ docs/build
 docs/source/_static/
 test_project/geckodriver.log
 db.sqlite
+dist/
+build/
+*.mo
+.tox/
