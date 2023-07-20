@@ -1,10 +1,35 @@
 .. image:: https://img.shields.io/pypi/v/django-session-security.svg
         :target: https://pypi.python.org/pypi/django-session-security
-
+        :alt: Latest version
 .. image:: https://github.com/yourlabs/django-session-security/actions/workflows/tests.yml/badge.svg
         :target: https://github.com/yourlabs/django-session-security/actions
+        :alt: Unit tests
+.. image:: https://readthedocs.org/projects/django-session-security/badge/?version=latest
+        :target: https://django-session-security.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+.. image:: https://img.shields.io/pypi/pyversions/django-session-security.svg?style=flat-square
+        :target: https://pypi.python.org/pypi/django-session-security/
+        :alt: Supported python versions
+.. image:: https://img.shields.io/pypi/l/django-session-security.svg?style=flat-square
+        :target: https://github.com/yourlabs/django-session-security/blob/master/LICENSE
+        :alt: License
 
+Supported python versions
+    Python 3.8, 3.9, 3.10
+Supported django versions
+    Django 1.8, 1.9, 1.10, 1.11, 2.2, 3.2, 4.0, 4.1
 
+A little javascript and middleware work together to ensure that the user was
+active during the past X minutes in any tab he has open.
+Otherwise, display a warning leaving a couple of minutes to show any kind of
+activity like moving the mouse. Otherwise, logout the user.
+
+Documentation
+-------------
+https://django-session-security.readthedocs.io/
+
+About
+-----
 
 This app provides a mechanism to logout inactive authenticated users. An
 inactive browser should be logged out automatically if the user left his
@@ -62,7 +87,7 @@ more recent activity was not detected anywhere else - in any other browser tab.
 Requirements
 ------------
 
-- Python 2.7 or 3.5+
+- Python 3.8+
 - jQuery 1.7+
 - Django 3.2 to 4.0
 - django.contrib.staticfiles or #YoYo
