@@ -14,7 +14,7 @@ For static file service, add to ``settings.INSTALLED_APPS``::
 
     'session_security',
 
-Add to ``settings.MIDDLEWARE_CLASSES``, **after** django's AuthenticationMiddleware::
+Add this line in ``settings.MIDDLEWARE_CLASSES`` on djanog 1.8+ or ``settings.MIDDLEWARE`` on django 1.10+, **after** django's AuthenticationMiddleware::
 
     'session_security.middleware.SessionSecurityMiddleware',
 
