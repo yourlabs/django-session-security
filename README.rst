@@ -64,7 +64,7 @@ Requirements
 
 - Python 2.7 or 3.5+
 - jQuery 1.7+
-- Django 1.8 to 4.0
+- Django 3.2 to 4.0
 - django.contrib.staticfiles or #YoYo
 
 Resources

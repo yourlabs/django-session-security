@@ -7,24 +7,58 @@ because your time matters and you probably have other things to worry about.
 Install the package::
 
     pip install django-session-security
-    # or the development version
-    pip install -e git+git://github.com/yourlabs/django-session-security.git#egg=django-session-security
 
-For static file service, add to ``settings.INSTALLED_APPS``::
+For static file service, add ``session_security`` to your ``INSTALLED_APPS`` settings:
 
-    'session_security',
+.. code-block:: python
 
-Add to ``settings.MIDDLEWARE_CLASSES``, **after** django's AuthenticationMiddleware::
+    INSTALLED_APPS = [
+        # ...
+        'session_security',
+        # ...
+    ]
 
-    'session_security.middleware.SessionSecurityMiddleware',
+Add ``session_security.middleware.SessionSecurityMiddleware`` to your ``MIDDLEWARE`` settings:
 
-Ensure settings.TEMPLATE_CONTEXT_PROCESSORS has::
+.. code-block:: python
 
-    'django.core.context_processors.request'
+    MIDDLEWARE = [
+        # ...
+        'session_security.middleware.SessionSecurityMiddleware',
+        # ...
+    ]
 
-Add to urls::
+.. warning::
 
-    url(r'session_security/', include('session_security.urls')),
+    The order of ``MIDDLEWARE`` is important. You should include the ``django-session-security`` middleware
+    after the authentication middleware, such as :class:`~django.contrib.auth.middleware.AuthenticationMiddleware`.
+
+Ensure ``django.template.context_processors.request`` is added to the template context processors:
+
+.. code-block:: python
+
+    TEMPLATES = [
+        {
+            "OPTIONS": {
+                "context_processors": [
+                    "django.template.context_processors.request",
+                    # ...
+                ]
+            }
+            # ...
+        }
+    ]
+
+Add ``session_security`` URLs to your project’s URLconf:
+
+.. code-block:: python
+
+    from django.urls import include, path
+
+    urlpatterns = [
+        # ...
+        path('session_security/', include('session_security.urls')),
+    ]
 
 At this point, we're going to assume that you have `django.contrib.staticfiles
 <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ working.
@@ -32,7 +66,7 @@ This means that `static files are automatically served with runserver
 <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#runserver>`_,
 and that you have to run `collectstatic when using another server
 <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#collectstatic>`_
-(fastcgi, uwsgi, and whatnot). If you don't use django.contrib.staticfiles,
+(fastcgi, uwsgi, and whatnot). If you don't use `django.contrib.staticfiles`,
 then you're on your own to manage staticfiles.
 
 After jQuery, add to your base template::
