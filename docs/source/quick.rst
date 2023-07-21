@@ -21,6 +21,11 @@ Add to ``settings.MIDDLEWARE_CLASSES``, **after** django's AuthenticationMiddlew
 Ensure settings.TEMPLATE_CONTEXT_PROCESSORS has::
 
     'django.core.context_processors.request'
+    
+    
+The above for Django 1.8+ (2.0+):
+
+    'django.template.context_processors.request'
 
 Add to urls::
 
