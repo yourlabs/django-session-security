@@ -14,7 +14,8 @@ if (window.yourlabs == undefined) window.yourlabs = {};
 //   leave a page with unsaved form data. Setting this will enable an
 //   onbeforeunload handler that doesn't block expire().
 // - events: a list of event types to watch for activity updates.
-// - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we just reload the page
+// - returnToUrl: a url to redirect users to expired sessions to. If this is not defined we can display a message or just reload the page
+// - loggedOffMessage: boolean if a message to display after expired sessions. If this is not defined we just reload the page
 yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
@@ -54,11 +55,13 @@ yourlabs.SessionSecurity.prototype = {
     expire: function() {
         this.expired = true;
         if (this.returnToUrl !== undefined) {
-            window.location.href = this.returnToUrl;
-        }
-        else {
-            window.location.reload();
-        }
+           window.location.href = this.returnToUrl;
+        } else if (this.loggedOffMessage !== undefined){
+           var url = window.location.href;
+           if (url.indexOf('?') > -1) url += '&loggedOff';
+           else url += '?loggedOff'
+           window.location.href = url;
+        } else window.location.reload();
     },
     
     // Called when there has been no activity for more than warnAfter

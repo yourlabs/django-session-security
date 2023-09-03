@@ -23,9 +23,9 @@ Or "Why does this app even exist" ? Here are the reasons:
   have to login again.
 - if the user session expires before the user is done filling a form: his work
   will be lost, and he will have to login again, and probably yell at you, dear
-  django dev ... at least I know I would !
+  django dev ... at least I know I would!
 
-This app allows to short circuit those limitations in session expiry.
+This app allows us to short circuit those limitations in session expiry.
 
 How does it work ?
 ------------------
@@ -42,14 +42,14 @@ since when the last user activity was recorded to PingView, next time it should
 ping.
 
 First, a warning should be shown after ``settings.SESSION_SECURITY_WARN_AFTER``
-seconds. The warning displays a text like "Your session is about to expire,
-move the mouse to extend it".
+seconds. The warning displays text such as "Your session is about to expire,
+move the mouse to extend it."
 
 Before displaying this warning, SessionSecurity will upload the time since the
 last client-side activity was recorded. The middleware will take it if it is
 shorter than what it already has - ie. another more recent activity was
 detected in another browser tab. The PingView will respond with the number of
-seconds since the last activity - all browser tab included.
+seconds since the last activity - all browser tabs included.
 
 If there was no other, more recent, activity recorded by the server: it will
 show the warning. Otherwise it will update the last activity in javascript from
@@ -58,6 +58,10 @@ the PingView response.
 Same goes to expire after ``settings.SESSION_SECURITY_EXPIRE_AFTER`` seconds.
 Javascript will first make an ajax request to PingView to ensure that another
 more recent activity was not detected anywhere else - in any other browser tab.
+
+Lastly after the time has expired the page can be redirected to a specific URL,
+reloaded current URL an banner such as "Your Session has timed out" or otherwise
+just reload the current URL.
 
 Requirements
 ------------
