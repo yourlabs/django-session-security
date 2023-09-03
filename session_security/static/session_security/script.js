@@ -1,3 +1,4 @@
+(function($){
 // Use 'yourlabs' as namespace.
 if (window.yourlabs == undefined) window.yourlabs = {};
 
@@ -166,3 +167,4 @@ yourlabs.SessionSecurity.prototype = {
         $(e.target).removeAttr('data-dirty');
     }
 }
+})(django.jQuery || $);
