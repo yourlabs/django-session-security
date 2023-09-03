@@ -22,6 +22,11 @@ PASSIVE_URL_NAMES
     thus cannot be described statically. NOTE: currently namespaces are not
     handled. Overridable in ``settings.SESSION_SECURITY_PASSIVE_URL_NAMES``.
 
+LOGOUT_MESSAGE
+    Message that will be shown after user has been logged out. Works using Django
+    messages framework. Default is ``None``, so no message will be added to the
+    request. Overridable in ``settings.SESSION_SECURITY_LOGOUT_MESSAGE``.
+
 SESSION_SECURITY_INSECURE
     Set this to True in your settings if you want the project to run without
     having to set SESSION_EXPIRE_AT_BROWSER_CLOSE=True, which you should
@@ -39,6 +44,8 @@ WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 
 PASSIVE_URL_NAMES = getattr(settings, 'SESSION_SECURITY_PASSIVE_URL_NAMES', [])
+
+LOGOUT_MESSAGE = getattr(settings, 'SESSION_SECURITY_LOGOUT_MESSAGE', None)
 
 expire_at_browser_close = getattr(
     settings,
