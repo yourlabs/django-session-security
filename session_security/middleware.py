@@ -12,7 +12,6 @@ Make sure that it is placed **after** authentication middlewares.
 from datetime import datetime, timedelta
 
 import django
-from django.contrib.auth import logout
 try: # Django 2.0
     from django.urls import reverse, resolve, Resolver404
 except: # Django < 2.0
@@ -55,13 +54,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         """ Update last activity time or logout. """
-        
-        if django.VERSION < (1, 10):
-            is_authenticated = request.user.is_authenticated()
-        else:
-            is_authenticated = request.user.is_authenticated
-
-        if not is_authenticated:
+        if not self.is_authenticated(request):
             return
 
         now = datetime.now()
@@ -72,7 +65,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
-            logout(request)
+            self.do_logout(request)
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
@@ -104,3 +97,19 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
         # Update the session
         set_last_activity(request.session, last_activity)
+
+    def is_authenticated(self, request):
+        # This is a separate method to allow for subclasses to override the
+        # behavior, mostly.
+        if django.VERSION < (1, 10):
+            is_authenticated = request.user.is_authenticated()
+        else:
+            is_authenticated = request.user.is_authenticated
+
+        return is_authenticated
+
+    def do_logout(self, request):
+        # This is a separate method to allow for subclasses to override the
+        # behavior, mostly.
+        from django.contrib.auth import logout
+        logout(request)
