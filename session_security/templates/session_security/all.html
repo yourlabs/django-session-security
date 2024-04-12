@@ -24,7 +24,7 @@ It provides sensible defaults so you could start with just::
 
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
     {% localize off %}
-        <script type="text/javascript">
+        <script type="text/javascript"{% if request.csp_nonce %} nonce="{{ request.csp_nonce }}"{% endif %}>
             var sessionSecurity = new yourlabs.SessionSecurity({
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},

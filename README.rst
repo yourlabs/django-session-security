@@ -15,9 +15,9 @@
         :alt: License
 
 Supported python versions
-    Python 3.8, 3.9, 3.10
+    Python 3.8, 3.9, 3.10, 3.11
 Supported django versions
-    Django 1.8, 1.9, 1.10, 1.11, 2.2, 3.2, 4.0, 4.1
+    Django 3.2, 4.0, 4.1
 
 A little javascript and middleware work together to ensure that the user was
 active during the past X minutes in any tab he has open.
@@ -89,7 +89,7 @@ Requirements
 
 - Python 3.8+
 - jQuery 1.7+
-- Django 1.8 to 4.1
+- Django 3.2 to 4.0
 - django.contrib.staticfiles or #YoYo
 
 Resources
