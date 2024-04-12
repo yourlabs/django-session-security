@@ -24,3 +24,7 @@
     overflow: auto;
     text-align: center;
 }
+
+.session_security {
+    display: none;
+}
