@@ -12,7 +12,6 @@
 # serve to show the default.
 
 import re
-import six
 import sys, os, os.path
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -43,8 +42,8 @@ for script in ('script',):
     out = os.path.join(static_root, '%s.html' % script)
     if os.path.exists(out):
         os.unlink(out)
-    with open(out, 'wb+') as f:
-        f.write(six.u(html))
+    with open(out, 'w') as f:
+        f.write(html)
 
 # -- General configuration -----------------------------------------------------
 
@@ -68,8 +67,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-session-security'
-copyright = u'2012-2015, James Pic and contributors'
+project = 'django-session-security'
+copyright = '2012-2015, James Pic and contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -211,8 +210,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-session-security.tex', u'django-session-security Documentation',
-   u'James Pic', 'manual'),
+  ('index', 'django-session-security.tex', 'django-session-security Documentation',
+   'James Pic', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -241,8 +240,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-session-security', u'django-session-security Documentation',
-     [u'James Pic'], 1)
+    ('index', 'django-session-security', 'django-session-security Documentation',
+     ['James Pic'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -255,8 +254,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-session-security', u'django-session-security Documentation',
-   u'James Pic', 'django-session-security', 'One line description of project.',
+  ('index', 'django-session-security', 'django-session-security Documentation',
+   'James Pic', 'django-session-security', 'One line description of project.',
    'Miscellaneous'),
 ]
 
