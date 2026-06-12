@@ -25,7 +25,7 @@ It provides sensible defaults so you could start with just::
     {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
     {% with redirect_to_logout_flag=request|redirect_to_logout %}
     {% localize off %}
-        <script type="text/javascript"{% if request.csp_nonce %} nonce="{{ request.csp_nonce }}"{% endif %}>
+        <script type="text/javascript" nonce="{% if request.csp_nonce %}{{ request.csp_nonce }}{% else %}{{ csp_nonce }}{% endif %}">
             var sessionSecurity = new yourlabs.SessionSecurity({
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
@@ -40,7 +40,7 @@ It provides sensible defaults so you could start with just::
     {# Hidden POST form for logout — required by Django 5.x (LogoutView no longer accepts GET) #}
     {% with redirect_to_logout=request|redirect_to_logout %}
     {% if redirect_to_logout %}
-    <form id="session_security_logout_form" action="{% url 'logout' %}" method="post" style="display:none">
+    <form id="session_security_logout_form" action="{% url 'logout' %}" method="post" class="session_security_hidden">
         {% csrf_token %}
     </form>
     {% endif %}

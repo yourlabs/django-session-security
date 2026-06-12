@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div id="session_security_warning" class="session_security" aria-hidden="true" role="dialog">
+<div id="session_security_warning" class="session_security_hidden" aria-hidden="true" role="dialog">
     <div class="session_security_overlay"></div>
     <div class="session_security_modal" role="document" tabindex="-1">
         <h3>{% trans 'Your session is about to expire' %}: <span id="session_security_counter"></span> {% trans 'seconds' %}</h3>
